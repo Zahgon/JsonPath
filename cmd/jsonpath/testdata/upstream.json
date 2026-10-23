@@ -1,0 +1,7819 @@
+{
+ "documents": {
+  "store": "{\n   \"string-property\" : \"string-value\", \n   \"int-max-property\" : , \n   \"long-max-property\" : , \n   \"boolean-property\" : true, \n   \"null-property\" : null, \n   \"int-small-property\" : 1, \n   \"max-price\" : 10, \n   \"store\" : {\n      \"book\" : [\n         {\n            \"category\" : \"reference\",\n            \"author\" : \"Nigel Rees\",\n            \"title\" : \"Sayings of the Century\",\n            \"display-price\" : 8.95\n         },\n         {\n            \"category\" : \"fiction\",\n            \"author\" : \"Evelyn Waugh\",\n            \"title\" : \"Sword of Honour\",\n            \"display-price\" : 12.99\n         },\n         {\n            \"category\" : \"fiction\",\n            \"author\" : \"Herman Melville\",\n            \"title\" : \"Moby Dick\",\n            \"isbn\" : \"0-553-21311-3\",\n            \"display-price\" : 8.99\n         },\n         {\n            \"category\" : \"fiction\",\n            \"author\" : \"J. R. R. Tolkien\",\n            \"title\" : \"The Lord of the Rings\",\n            \"isbn\" : \"0-395-19395-8\",\n            \"display-price\" : 22.99\n         }\n      ],\n      \"bicycle\" : {\n         \"foo\" : \"baz\",\n         \"escape\" : \"Esc\\b\\f\\n\\r\\t\\n\\t\\u002A\",\n         \"color\" : \"red\",\n         \"display-price\" : 19.95,\n         \"foo:bar\" : \"fooBar\",\n         \"dot.notation\" : \"new\",\n         \"dash-notation\" : \"dashes\"\n      }\n   },\n   \"foo\" : \"bar\",\n   \"@id\" : \"ID\"\n}"
+ },
+ "cases": [
+  {
+   "suite": "DeepScanTest",
+   "args": [
+    "compile",
+    "$..[2][3]"
+   ],
+   "stdout": "$..[2][3]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "DeepScanTest",
+   "args": [
+    "read",
+    "$..[2][3]"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "DeepScanTest",
+   "args": [
+    "compile",
+    "$..[4]"
+   ],
+   "stdout": "$..[4]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "DeepScanTest",
+   "args": [
+    "read",
+    "$..[4]"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "DeepScanTest",
+   "args": [
+    "compile",
+    "$.foo.bar.[5]"
+   ],
+   "stdout": "$['foo']['bar'][5]\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "DeepScanTest",
+   "args": [
+    "read",
+    "$.foo.bar.[5]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Expected to find an object with property ['bar'] in path $['foo'] but found 'java.lang.String'. This is not a json object according to the JsonProvider: 'com.jayway.jsonpath.spi.json.JsonSmartJsonProvider'.\n",
+   "status": 1
+  },
+  {
+   "suite": "DeepScanTest",
+   "args": [
+    "compile",
+    "$.foo.bar.[5, 10]"
+   ],
+   "stdout": "$['foo']['bar'][5,10]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "DeepScanTest",
+   "args": [
+    "read",
+    "$.foo.bar.[5, 10]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Expected to find an object with property ['bar'] in path $['foo'] but found 'java.lang.String'. This is not a json object according to the JsonProvider: 'com.jayway.jsonpath.spi.json.JsonSmartJsonProvider'.\n",
+   "status": 1
+  },
+  {
+   "suite": "DeepScanTest",
+   "args": [
+    "compile",
+    "$..foo"
+   ],
+   "stdout": "$..['foo']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "DeepScanTest",
+   "args": [
+    "read",
+    "$..foo"
+   ],
+   "document": "store",
+   "stdout": "[\"bar\",\"baz\"]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "DeepScanTest",
+   "args": [
+    "compile",
+    "$..foo.bar"
+   ],
+   "stdout": "$..['foo']['bar']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "DeepScanTest",
+   "args": [
+    "read",
+    "$..foo.bar"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "DeepScanTest",
+   "args": [
+    "compile",
+    "$..[*].foo.bar"
+   ],
+   "stdout": "$..[*]['foo']['bar']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "DeepScanTest",
+   "args": [
+    "read",
+    "$..[*].foo.bar"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "DeepScanTest",
+   "args": [
+    "compile",
+    "$..foo[?(@.bar)].bar"
+   ],
+   "stdout": "$..['foo'][?]['bar']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "DeepScanTest",
+   "args": [
+    "read",
+    "$..foo[?(@.bar)].bar"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "DeepScanTest",
+   "args": [
+    "compile",
+    "$..[*]foo[?(@.bar)].bar"
+   ],
+   "stdout": "$..[*]['foo'][?]['bar']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "DeepScanTest",
+   "args": [
+    "read",
+    "$..[*]foo[?(@.bar)].bar"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "DeepScanTest",
+   "args": [
+    "compile",
+    "$..x"
+   ],
+   "stdout": "$..['x']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "DeepScanTest",
+   "args": [
+    "read",
+    "$..x"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "DeepScanTest",
+   "args": [
+    "compile",
+    "$..['a', 'c']"
+   ],
+   "stdout": "$..['a','c']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "DeepScanTest",
+   "args": [
+    "read",
+    "$..['a', 'c']"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "DeepScanTest",
+   "args": [
+    "compile",
+    "$..a"
+   ],
+   "stdout": "$..['a']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "DeepScanTest",
+   "args": [
+    "read",
+    "$..a"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "DeepScanTest",
+   "args": [
+    "compile",
+    "$..['a', 'b']"
+   ],
+   "stdout": "$..['a','b']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "DeepScanTest",
+   "args": [
+    "read",
+    "$..['a', 'b']"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "DeepScanTest",
+   "args": [
+    "compile",
+    "$..['a']"
+   ],
+   "stdout": "$..['a']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "DeepScanTest",
+   "args": [
+    "read",
+    "$..['a']"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "DeepScanTest",
+   "args": [
+    "compile",
+    "$..['a'].x"
+   ],
+   "stdout": "$..['a']['x']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "DeepScanTest",
+   "args": [
+    "read",
+    "$..['a'].x"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "DeepScanTest",
+   "args": [
+    "compile",
+    "$..[?(@.mammal == true)].color"
+   ],
+   "stdout": "$..[?]['color']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "DeepScanTest",
+   "args": [
+    "read",
+    "$..[?(@.mammal == true)].color"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "DeepScanTest",
+   "args": [
+    "compile",
+    "$..*[?(@.length() > 5)]"
+   ],
+   "stdout": "$..[*][?]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "DeepScanTest",
+   "args": [
+    "read",
+    "$..*[?(@.length() > 5)]"
+   ],
+   "document": "store",
+   "stdout": "[{\"foo\":\"baz\",\"escape\":\"Esc\\b\\f\\n\\r\\t\\n\\t*\",\"color\":\"red\",\"display-price\":19.95,\"foo:bar\":\"fooBar\",\"dot.notation\":\"new\",\"dash-notation\":\"dashes\"}]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "DeepScanTest",
+   "args": [
+    "compile",
+    "$..array[0]"
+   ],
+   "stdout": "$..['array'][0]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "DeepScanTest",
+   "args": [
+    "read",
+    "$..array[0]"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "EscapeTest",
+   "args": [
+    "compile",
+    "$"
+   ],
+   "stdout": "$\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "EscapeTest",
+   "args": [
+    "read",
+    "$"
+   ],
+   "document": "store",
+   "stdout": "{\"string-property\":\"string-value\",\"int-max-property\":\"\",\"long-max-property\":\"\",\"boolean-property\":true,\"null-property\":null,\"int-small-property\":1,\"max-price\":10,\"store\":{\"book\":[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}],\"bicycle\":{\"foo\":\"baz\",\"escape\":\"Esc\\b\\f\\n\\r\\t\\n\\t*\",\"color\":\"red\",\"display-price\":19.95,\"foo:bar\":\"fooBar\",\"dot.notation\":\"new\",\"dash-notation\":\"dashes\"}},\"foo\":\"bar\",\"@id\":\"ID\"}\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "EvaluationListenerTest",
+   "args": [
+    "compile",
+    "$..title"
+   ],
+   "stdout": "$..['title']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "EvaluationListenerTest",
+   "args": [
+    "read",
+    "$..title"
+   ],
+   "document": "store",
+   "stdout": "[\"Sayings of the Century\",\"Sword of Honour\",\"Moby Dick\",\"The Lord of the Rings\"]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterCompilerTest",
+   "args": [
+    "filter",
+    "[?(@)]"
+   ],
+   "stdout": "[?(@)]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterCompilerTest",
+   "args": [
+    "filter",
+    "[?(@.firstname)]"
+   ],
+   "stdout": "[?(@['firstname'])]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterCompilerTest",
+   "args": [
+    "filter",
+    "[?(@['firstname'])]"
+   ],
+   "stdout": "[?(@['firstname'])]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterCompilerTest",
+   "args": [
+    "filter",
+    "[?($.firstname)]"
+   ],
+   "stdout": "[?($['firstname'])]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterCompilerTest",
+   "args": [
+    "filter",
+    "[?($['firstname'])]"
+   ],
+   "stdout": "[?($['firstname'])]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterCompilerTest",
+   "args": [
+    "filter",
+    "[?($['firstname'].lastname)]"
+   ],
+   "stdout": "[?($['firstname']['lastname'])]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterCompilerTest",
+   "args": [
+    "filter",
+    "[?($['firstname']['lastname'])]"
+   ],
+   "stdout": "[?($['firstname']['lastname'])]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterCompilerTest",
+   "args": [
+    "filter",
+    "[?($['firstname']['lastname'].*)]"
+   ],
+   "stdout": "[?($['firstname']['lastname'][*])]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterCompilerTest",
+   "args": [
+    "filter",
+    "[?($['firstname']['lastname'][*])]"
+   ],
+   "stdout": "[?($['firstname']['lastname'][*])]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterCompilerTest",
+   "args": [
+    "filter",
+    "[?($['firstname']['num_eq'] == 1)]"
+   ],
+   "stdout": "[?($['firstname']['num_eq'] == 1)]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterCompilerTest",
+   "args": [
+    "filter",
+    "[?($['firstname']['num_gt'] > 1.1)]"
+   ],
+   "stdout": "[?($['firstname']['num_gt'] > 1.1)]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterCompilerTest",
+   "args": [
+    "filter",
+    "[?($['firstname']['num_lt'] < 11.11)]"
+   ],
+   "stdout": "[?($['firstname']['num_lt'] < 11.11)]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterCompilerTest",
+   "args": [
+    "filter",
+    "[?($['firstname']['str_eq'] == 'hej')]"
+   ],
+   "stdout": "[?($['firstname']['str_eq'] == 'hej')]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterCompilerTest",
+   "args": [
+    "filter",
+    "[?($['firstname']['str_eq'] == '')]"
+   ],
+   "stdout": "[?($['firstname']['str_eq'] == '')]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterCompilerTest",
+   "args": [
+    "filter",
+    "[?($['firstname']['str_eq'] == null)]"
+   ],
+   "stdout": "[?($['firstname']['str_eq'] == null)]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterCompilerTest",
+   "args": [
+    "filter",
+    "[?($['firstname']['str_eq'] == true)]"
+   ],
+   "stdout": "[?($['firstname']['str_eq'] == true)]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterCompilerTest",
+   "args": [
+    "filter",
+    "[?($['firstname']['str_eq'] == false)]"
+   ],
+   "stdout": "[?($['firstname']['str_eq'] == false)]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterCompilerTest",
+   "args": [
+    "filter",
+    "[?(@.firstname && @.lastname)]"
+   ],
+   "stdout": "[?(@['firstname'] && @['lastname'])]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterCompilerTest",
+   "args": [
+    "filter",
+    "[?(@['firstname'] && @['lastname'])]"
+   ],
+   "stdout": "[?(@['firstname'] && @['lastname'])]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterCompilerTest",
+   "args": [
+    "filter",
+    "[?((@.firstname || @.lastname) && @.and)]"
+   ],
+   "stdout": "[?((@['firstname'] || @['lastname']) && @['and'])]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterCompilerTest",
+   "args": [
+    "filter",
+    "[?((@['firstname'] || @['lastname']) && @['and'])]"
+   ],
+   "stdout": "[?((@['firstname'] || @['lastname']) && @['and'])]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterCompilerTest",
+   "args": [
+    "filter",
+    "[?((@.a || @.b || @.c) && @.x)]"
+   ],
+   "stdout": "[?((@['a'] || @['b'] || @['c']) && @['x'])]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterCompilerTest",
+   "args": [
+    "filter",
+    "[?((@['a'] || @['b'] || @['c']) && @['x'])]"
+   ],
+   "stdout": "[?((@['a'] || @['b'] || @['c']) && @['x'])]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterCompilerTest",
+   "args": [
+    "filter",
+    "[?((@.a && @.b && @.c) || @.x)]"
+   ],
+   "stdout": "[?((@['a'] && @['b'] && @['c']) || @['x'])]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterCompilerTest",
+   "args": [
+    "filter",
+    "[?((@['a'] && @['b'] && @['c']) || @['x'])]"
+   ],
+   "stdout": "[?((@['a'] && @['b'] && @['c']) || @['x'])]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterParseTest",
+   "args": [
+    "filter",
+    "[?(@.foo)]"
+   ],
+   "stdout": "[?(@['foo'])]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterParseTest",
+   "args": [
+    "filter",
+    "[?(@.foo == 1)]"
+   ],
+   "stdout": "[?(@['foo'] == 1)]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterParseTest",
+   "args": [
+    "filter",
+    "[?(@.foo == 1 || @['bar'])]"
+   ],
+   "stdout": "[?(@['foo'] == 1 || @['bar'])]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterParseTest",
+   "args": [
+    "filter",
+    "[?(@.foo == 1 && @['bar'])]"
+   ],
+   "stdout": "[?(@['foo'] == 1 && @['bar'])]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterParseTest",
+   "args": [
+    "filter",
+    "[?(@.foo == 1)"
+   ],
+   "stdout": "",
+   "stderr": "InvalidPathException: Filter must start with '[' and end with ']'. [?(@.foo == 1)\n",
+   "status": 1
+  },
+  {
+   "suite": "FilterParseTest",
+   "args": [
+    "filter",
+    "[?(@.foo == 1) ||]"
+   ],
+   "stdout": "",
+   "stderr": "InvalidPathException: Filter must start with '[?(' and end with ')]'. [?(@.foo == 1) ||]\n",
+   "status": 1
+  },
+  {
+   "suite": "FilterParseTest",
+   "args": [
+    "filter",
+    "[?@.foo == 1)]"
+   ],
+   "stdout": "",
+   "stderr": "InvalidPathException: Filter must start with '[?(' and end with ')]'. [?@.foo == 1)]\n",
+   "status": 1
+  },
+  {
+   "suite": "FilterParseTest",
+   "args": [
+    "filter",
+    "[?(@['a'] >= 1)]"
+   ],
+   "stdout": "[?(@['a'] >= 1)]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterParseTest",
+   "args": [
+    "filter",
+    "[?(@['a'] <= 1)]"
+   ],
+   "stdout": "[?(@['a'] <= 1)]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterParseTest",
+   "args": [
+    "filter",
+    "[?(@['a'] == 1)]"
+   ],
+   "stdout": "[?(@['a'] == 1)]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterParseTest",
+   "args": [
+    "filter",
+    "[?(@['a'] != 1)]"
+   ],
+   "stdout": "[?(@['a'] != 1)]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterParseTest",
+   "args": [
+    "filter",
+    "[?(@['a'] < 1)]"
+   ],
+   "stdout": "[?(@['a'] < 1)]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterParseTest",
+   "args": [
+    "filter",
+    "[?(@['a'] > 1)]"
+   ],
+   "stdout": "[?(@['a'] > 1)]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterParseTest",
+   "args": [
+    "filter",
+    "[?(@['a'] NIN [1])]"
+   ],
+   "stdout": "[?(@['a'] NIN [1])]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterParseTest",
+   "args": [
+    "filter",
+    "[?(@['a'] IN ['a'])]"
+   ],
+   "stdout": "[?(@['a'] IN ['a'])]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterParseTest",
+   "args": [
+    "filter",
+    "[?(@['a'] CONTAINS 'a')]"
+   ],
+   "stdout": "[?(@['a'] CONTAINS 'a')]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterParseTest",
+   "args": [
+    "filter",
+    "[?(@['a'] ALL ['a','b'])]"
+   ],
+   "stdout": "[?(@['a'] ALL ['a','b'])]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterParseTest",
+   "args": [
+    "filter",
+    "[?(@['a'] SIZE 5)]"
+   ],
+   "stdout": "[?(@['a'] SIZE 5)]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterParseTest",
+   "args": [
+    "filter",
+    "[?(@['a'] SUBSETOF [])]"
+   ],
+   "stdout": "[?(@['a'] SUBSETOF [])]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterParseTest",
+   "args": [
+    "filter",
+    "[?(@['a'] ANYOF [])]"
+   ],
+   "stdout": "[?(@['a'] ANYOF [])]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterParseTest",
+   "args": [
+    "filter",
+    "[?(@['a'] NONEOF [])]"
+   ],
+   "stdout": "[?(@['a'] NONEOF [])]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterParseTest",
+   "args": [
+    "filter",
+    "[?(@['a'])]"
+   ],
+   "stdout": "[?(@['a'])]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterParseTest",
+   "args": [
+    "filter",
+    "[?(!@['a'])]"
+   ],
+   "stdout": "[?(!@['a'])]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterParseTest",
+   "args": [
+    "filter",
+    "[?(@['a'] TYPE java.lang.String)]"
+   ],
+   "stdout": "",
+   "stderr": "InvalidPathException: Failed to parse filter: [?(@['a'] TYPE java.lang.String)], error on position: 15, char: j\n",
+   "status": 1
+  },
+  {
+   "suite": "FilterParseTest",
+   "args": [
+    "filter",
+    "[?(@['a'] MATCHES [?(@['x'] == 1000)])]"
+   ],
+   "stdout": "[?(@['a'] MATCHES [?(@['x'] == 1000)])]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterTest",
+   "args": [
+    "filter",
+    "[?(1 == '1')]"
+   ],
+   "stdout": "[?(1 == '1')]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterTest",
+   "args": [
+    "filter",
+    "[?('1' == 1)]"
+   ],
+   "stdout": "[?('1' == 1)]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterTest",
+   "args": [
+    "filter",
+    "[?(1 === '1')]"
+   ],
+   "stdout": "[?(1 === '1')]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterTest",
+   "args": [
+    "filter",
+    "[?('1' === 1)]"
+   ],
+   "stdout": "[?('1' === 1)]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterTest",
+   "args": [
+    "filter",
+    "[?(1 === 1)]"
+   ],
+   "stdout": "[?(1 === 1)]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterTest",
+   "args": [
+    "filter",
+    "[?(@.foo == "
+   ],
+   "stdout": "",
+   "stderr": "InvalidPathException: Filter must start with '[' and end with ']'. [?(@.foo == \n",
+   "status": 1
+  },
+  {
+   "suite": "FilterTest",
+   "args": [
+    "filter",
+    "[?(@.bar == "
+   ],
+   "stdout": "",
+   "stderr": "InvalidPathException: Filter must start with '[' and end with ']'. [?(@.bar == \n",
+   "status": 1
+  },
+  {
+   "suite": "FilterTest",
+   "args": [
+    "compile",
+    "$"
+   ],
+   "stdout": "$\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterTest",
+   "args": [
+    "read",
+    "$"
+   ],
+   "document": "store",
+   "stdout": "{\"string-property\":\"string-value\",\"int-max-property\":\"\",\"long-max-property\":\"\",\"boolean-property\":true,\"null-property\":null,\"int-small-property\":1,\"max-price\":10,\"store\":{\"book\":[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}],\"bicycle\":{\"foo\":\"baz\",\"escape\":\"Esc\\b\\f\\n\\r\\t\\n\\t*\",\"color\":\"red\",\"display-price\":19.95,\"foo:bar\":\"fooBar\",\"dot.notation\":\"new\",\"dash-notation\":\"dashes\"}},\"foo\":\"bar\",\"@id\":\"ID\"}\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterTest",
+   "args": [
+    "filter",
+    "[?((@.firstname == 'Bob' || @.firstname == 'Jane') && @.surname == 'Doe')]"
+   ],
+   "stdout": "[?((@['firstname'] == 'Bob' || @['firstname'] == 'Jane') && @['surname'] == 'Doe')]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterTest",
+   "args": [
+    "filter",
+    "[?((@.firstname == 'Bob' || @.firstname == 'Jane') && @.surname == 'Smith')]"
+   ],
+   "stdout": "[?((@['firstname'] == 'Bob' || @['firstname'] == 'Jane') && @['surname'] == 'Smith')]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterTest",
+   "args": [
+    "filter",
+    "[?(@.foo == 'baar')]"
+   ],
+   "stdout": "[?(@['foo'] == 'baar')]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterTest",
+   "args": [
+    "filter",
+    "[?(@['foo'] == 'baar')]"
+   ],
+   "stdout": "[?(@['foo'] == 'baar')]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterTest",
+   "args": [
+    "filter",
+    "[?(@.foo)]"
+   ],
+   "stdout": "[?(@['foo'])]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterTest",
+   "args": [
+    "filter",
+    "[?(@['foo'])]"
+   ],
+   "stdout": "[?(@['foo'])]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterTest",
+   "args": [
+    "compile",
+    "$.store.book[?(@.category in ['reference', 'fiction'])]"
+   ],
+   "stdout": "$['store']['book'][?]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterTest",
+   "args": [
+    "read",
+    "$.store.book[?(@.category in ['reference', 'fiction'])]"
+   ],
+   "document": "store",
+   "stdout": "[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "compile",
+    "$.store.book[?('a' == 'a')].author"
+   ],
+   "stdout": "$['store']['book'][?]['author']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "read",
+    "$.store.book[?('a' == 'a')].author"
+   ],
+   "document": "store",
+   "stdout": "[\"Nigel Rees\",\"Evelyn Waugh\",\"Herman Melville\",\"J. R. R. Tolkien\"]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "compile",
+    "$.store.book[?('a' == 'b')].author"
+   ],
+   "stdout": "$['store']['book'][?]['author']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "read",
+    "$.store.book[?('a' == 'b')].author"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "compile",
+    "$.store.book[?(@.category == 'reference')].author"
+   ],
+   "stdout": "$['store']['book'][?]['author']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "read",
+    "$.store.book[?(@.category == 'reference')].author"
+   ],
+   "document": "store",
+   "stdout": "[\"Nigel Rees\"]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "compile",
+    "$.store.book[?('reference' == @.category)].author"
+   ],
+   "stdout": "$['store']['book'][?]['author']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "read",
+    "$.store.book[?('reference' == @.category)].author"
+   ],
+   "document": "store",
+   "stdout": "[\"Nigel Rees\"]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "compile",
+    "$.store.book[?(@.category == @.category)].author"
+   ],
+   "stdout": "$['store']['book'][?]['author']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "read",
+    "$.store.book[?(@.category == @.category)].author"
+   ],
+   "document": "store",
+   "stdout": "[\"Nigel Rees\",\"Evelyn Waugh\",\"Herman Melville\",\"J. R. R. Tolkien\"]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "compile",
+    "$.store.book[?(@.category =~ /reference/)].author"
+   ],
+   "stdout": "$['store']['book'][?]['author']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "read",
+    "$.store.book[?(@.category =~ /reference/)].author"
+   ],
+   "document": "store",
+   "stdout": "[\"Nigel Rees\"]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "compile",
+    "$.store.book[?(/reference/ =~ @.category)].author"
+   ],
+   "stdout": "$['store']['book'][?]['author']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "read",
+    "$.store.book[?(/reference/ =~ @.category)].author"
+   ],
+   "document": "store",
+   "stdout": "[\"Nigel Rees\"]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "compile",
+    "$.store.book[?(@.category =~ /REFERENCE/)].author"
+   ],
+   "stdout": "$['store']['book'][?]['author']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "read",
+    "$.store.book[?(@.category =~ /REFERENCE/)].author"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "compile",
+    "$.store.book[?(@.category =~ /REFERENCE/i)].author"
+   ],
+   "stdout": "$['store']['book'][?]['author']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "read",
+    "$.store.book[?(@.category =~ /REFERENCE/i)].author"
+   ],
+   "document": "store",
+   "stdout": "[\"Nigel Rees\"]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "compile",
+    "$.store[?(@.book[*].category =~ /Reference/i)].name"
+   ],
+   "stdout": "$['store'][?]['name']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "read",
+    "$.store[?(@.book[*].category =~ /Reference/i)].name"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "compile",
+    "$.store.book[?(@.isbn)].author"
+   ],
+   "stdout": "$['store']['book'][?]['author']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "read",
+    "$.store.book[?(@.isbn)].author"
+   ],
+   "document": "store",
+   "stdout": "[\"Herman Melville\",\"J. R. R. Tolkien\"]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "compile",
+    "$.store.book[?(!@.isbn)].author"
+   ],
+   "stdout": "$['store']['book'][?]['author']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "read",
+    "$.store.book[?(!@.isbn)].author"
+   ],
+   "document": "store",
+   "stdout": "[\"Nigel Rees\",\"Evelyn Waugh\"]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "compile",
+    "$[?(@)]"
+   ],
+   "stdout": "$[?]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "read",
+    "$[?(@)]"
+   ],
+   "document": "store",
+   "stdout": "[{\"string-property\":\"string-value\",\"int-max-property\":\"\",\"long-max-property\":\"\",\"boolean-property\":true,\"null-property\":null,\"int-small-property\":1,\"max-price\":10,\"store\":{\"book\":[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}],\"bicycle\":{\"foo\":\"baz\",\"escape\":\"Esc\\b\\f\\n\\r\\t\\n\\t*\",\"color\":\"red\",\"display-price\":19.95,\"foo:bar\":\"fooBar\",\"dot.notation\":\"new\",\"dash-notation\":\"dashes\"}},\"foo\":\"bar\",\"@id\":\"ID\"}]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "compile",
+    "$[?(@ != null)]"
+   ],
+   "stdout": "$[?]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "read",
+    "$[?(@ != null)]"
+   ],
+   "document": "store",
+   "stdout": "[{\"string-property\":\"string-value\",\"int-max-property\":\"\",\"long-max-property\":\"\",\"boolean-property\":true,\"null-property\":null,\"int-small-property\":1,\"max-price\":10,\"store\":{\"book\":[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}],\"bicycle\":{\"foo\":\"baz\",\"escape\":\"Esc\\b\\f\\n\\r\\t\\n\\t*\",\"color\":\"red\",\"display-price\":19.95,\"foo:bar\":\"fooBar\",\"dot.notation\":\"new\",\"dash-notation\":\"dashes\"}},\"foo\":\"bar\",\"@id\":\"ID\"}]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "compile",
+    "$[?(!@)]"
+   ],
+   "stdout": "$[?]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "read",
+    "$[?(!@)]"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "compile",
+    "$[?(@.value=='5')]"
+   ],
+   "stdout": "$[?]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "read",
+    "$[?(@.value=='5')]"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "compile",
+    "$[?(@.value==5)]"
+   ],
+   "stdout": "$[?]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "read",
+    "$[?(@.value==5)]"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "compile",
+    "$[?(@.value=='5.1.26')]"
+   ],
+   "stdout": "$[?]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "read",
+    "$[?(@.value=='5.1.26')]"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "compile",
+    "$[?(@.value==5.1)]"
+   ],
+   "stdout": "$[?]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "read",
+    "$[?(@.value==5.1)]"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "compile",
+    "$[?(@.value<'7')]"
+   ],
+   "stdout": "$[?]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "read",
+    "$[?(@.value<'7')]"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "compile",
+    "$[?(@.value<'5')]"
+   ],
+   "stdout": "$[?]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "read",
+    "$[?(@.value<'5')]"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "compile",
+    "$[?(@.value<7)]"
+   ],
+   "stdout": "$[?]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "read",
+    "$[?(@.value<7)]"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "compile",
+    "$[?(@.value<5)]"
+   ],
+   "stdout": "$[?]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "read",
+    "$[?(@.value<5)]"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "compile",
+    "$[?(@.value<7.1)]"
+   ],
+   "stdout": "$[?]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "read",
+    "$[?(@.value<7.1)]"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "compile",
+    "$[?(@.value<5.1)]"
+   ],
+   "stdout": "$[?]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "InlineFilterTest",
+   "args": [
+    "read",
+    "$[?(@.value<5.1)]"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "Issue_487",
+   "args": [
+    "compile",
+    "$['key,']"
+   ],
+   "stdout": "$['key,']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "Issue_487",
+   "args": [
+    "read",
+    "$['key,']"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: No results for path: $['key,']\n",
+   "status": 1
+  },
+  {
+   "suite": "Issue_487",
+   "args": [
+    "compile",
+    "$['key\\,']"
+   ],
+   "stdout": "$['key,']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "Issue_487",
+   "args": [
+    "read",
+    "$['key\\,']"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: No results for path: $['key,']\n",
+   "status": 1
+  },
+  {
+   "suite": "Issue_537",
+   "args": [
+    "compile",
+    "$..data"
+   ],
+   "stdout": "$..['data']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "Issue_537",
+   "args": [
+    "read",
+    "$..data"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "Issue_537",
+   "args": [
+    "compile",
+    "$.list"
+   ],
+   "stdout": "$['list']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "Issue_537",
+   "args": [
+    "read",
+    "$.list"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: No results for path: $['list']\n",
+   "status": 1
+  },
+  {
+   "suite": "Issue_721",
+   "args": [
+    "compile",
+    "$.top.middle.bottom"
+   ],
+   "stdout": "$['top']['middle']['bottom']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "Issue_721",
+   "args": [
+    "read",
+    "$.top.middle.bottom"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['top']\n",
+   "status": 1
+  },
+  {
+   "suite": "Issue_721",
+   "args": [
+    "compile",
+    "$"
+   ],
+   "stdout": "$\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "Issue_721",
+   "args": [
+    "read",
+    "$"
+   ],
+   "document": "store",
+   "stdout": "{\"string-property\":\"string-value\",\"int-max-property\":\"\",\"long-max-property\":\"\",\"boolean-property\":true,\"null-property\":null,\"int-small-property\":1,\"max-price\":10,\"store\":{\"book\":[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}],\"bicycle\":{\"foo\":\"baz\",\"escape\":\"Esc\\b\\f\\n\\r\\t\\n\\t*\",\"color\":\"red\",\"display-price\":19.95,\"foo:bar\":\"fooBar\",\"dot.notation\":\"new\",\"dash-notation\":\"dashes\"}},\"foo\":\"bar\",\"@id\":\"ID\"}\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "Issue_721",
+   "args": [
+    "compile",
+    "$[*].top.middle.bottom"
+   ],
+   "stdout": "$[*]['top']['middle']['bottom']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "Issue_721",
+   "args": [
+    "read",
+    "$[*].top.middle.bottom"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "Issue_786",
+   "args": [
+    "compile",
+    "$..book.length()"
+   ],
+   "stdout": "$.length()\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "Issue_786",
+   "args": [
+    "read",
+    "$..book.length()"
+   ],
+   "document": "store",
+   "stdout": "4\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "Issue_973",
+   "args": [
+    "compile",
+    "@[\"\",/\\"
+   ],
+   "stdout": "",
+   "stderr": "InvalidPathException: Property has not been closed - missing closing ]\n",
+   "status": 1
+  },
+  {
+   "suite": "Issue_973",
+   "args": [
+    "read",
+    "@[\"\",/\\"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "InvalidPathException: Property has not been closed - missing closing ]\n",
+   "status": 1
+  },
+  {
+   "suite": "MultiPropTest",
+   "args": [
+    "compile",
+    "$['a', 'b']"
+   ],
+   "stdout": "$['a','b']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "MultiPropTest",
+   "args": [
+    "read",
+    "$['a', 'b']"
+   ],
+   "document": "store",
+   "stdout": "{}\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "MultiPropTest",
+   "args": [
+    "compile",
+    "$['a', 'd']"
+   ],
+   "stdout": "$['a','d']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "MultiPropTest",
+   "args": [
+    "read",
+    "$['a', 'd']"
+   ],
+   "document": "store",
+   "stdout": "{}\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "MultiPropTest",
+   "args": [
+    "compile",
+    "$['a', 'x']"
+   ],
+   "stdout": "$['a','x']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "MultiPropTest",
+   "args": [
+    "read",
+    "$['a', 'x']"
+   ],
+   "document": "store",
+   "stdout": "{}\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "MultiPropTest",
+   "args": [
+    "compile",
+    "$['a', 'c'].v"
+   ],
+   "stdout": "$['a','c']['v']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "MultiPropTest",
+   "args": [
+    "read",
+    "$['a', 'c'].v"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "MultiPropTest",
+   "args": [
+    "compile",
+    "$['d', 'a', 'c', 'm'].v"
+   ],
+   "stdout": "$['d','a','c','m']['v']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "MultiPropTest",
+   "args": [
+    "read",
+    "$['d', 'a', 'c', 'm'].v"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "MultiPropTest",
+   "args": [
+    "compile",
+    "$['a', 'c'][?(@.flag)].v"
+   ],
+   "stdout": "$['a','c'][?]['v']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "MultiPropTest",
+   "args": [
+    "read",
+    "$['a', 'c'][?(@.flag)].v"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "MultiPropTest",
+   "args": [
+    "compile",
+    "$..['a', 'c'].v"
+   ],
+   "stdout": "$..['a','c']['v']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "MultiPropTest",
+   "args": [
+    "read",
+    "$..['a', 'c'].v"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "MultiPropTest",
+   "args": [
+    "compile",
+    "$..['a', 'c'][?(@.flag)].v"
+   ],
+   "stdout": "$..['a','c'][?]['v']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "MultiPropTest",
+   "args": [
+    "read",
+    "$..['a', 'c'][?(@.flag)].v"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "MultiPropTest",
+   "args": [
+    "compile",
+    "$.x[1]['a', 'c'].v"
+   ],
+   "stdout": "$['x'][1]['a','c']['v']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "MultiPropTest",
+   "args": [
+    "read",
+    "$.x[1]['a', 'c'].v"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['x']\n",
+   "status": 1
+  },
+  {
+   "suite": "MultiPropTest",
+   "args": [
+    "compile",
+    "$.x[*]['a', 'c'].v"
+   ],
+   "stdout": "$['x'][*]['a','c']['v']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "MultiPropTest",
+   "args": [
+    "read",
+    "$.x[*]['a', 'c'].v"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['x']\n",
+   "status": 1
+  },
+  {
+   "suite": "MultiPropTest",
+   "args": [
+    "compile",
+    "$[*][*]['a', 'c'].v"
+   ],
+   "stdout": "$[*][*]['a','c']['v']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "MultiPropTest",
+   "args": [
+    "read",
+    "$[*][*]['a', 'c'].v"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "MultiPropTest",
+   "args": [
+    "compile",
+    "$.x[1]['d', 'a', 'c', 'm'].v"
+   ],
+   "stdout": "$['x'][1]['d','a','c','m']['v']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "MultiPropTest",
+   "args": [
+    "read",
+    "$.x[1]['d', 'a', 'c', 'm'].v"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['x']\n",
+   "status": 1
+  },
+  {
+   "suite": "MultiPropTest",
+   "args": [
+    "compile",
+    "$.x[*]['d', 'a', 'c', 'm'].v"
+   ],
+   "stdout": "$['x'][*]['d','a','c','m']['v']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "MultiPropTest",
+   "args": [
+    "read",
+    "$.x[*]['d', 'a', 'c', 'm'].v"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['x']\n",
+   "status": 1
+  },
+  {
+   "suite": "OptionsTest",
+   "args": [
+    "compile",
+    "$.baz"
+   ],
+   "stdout": "$['baz']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "OptionsTest",
+   "args": [
+    "read",
+    "$.baz"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: No results for path: $['baz']\n",
+   "status": 1
+  },
+  {
+   "suite": "OptionsTest",
+   "args": [
+    "compile",
+    "$.foo"
+   ],
+   "stdout": "$['foo']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "OptionsTest",
+   "args": [
+    "read",
+    "$.foo"
+   ],
+   "document": "store",
+   "stdout": "\"bar\"\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "OptionsTest",
+   "args": [
+    "compile",
+    "$..foo"
+   ],
+   "stdout": "$..['foo']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "OptionsTest",
+   "args": [
+    "read",
+    "$..foo"
+   ],
+   "document": "store",
+   "stdout": "[\"bar\",\"baz\"]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "OptionsTest",
+   "args": [
+    "compile",
+    "$['foo']"
+   ],
+   "stdout": "$['foo']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "OptionsTest",
+   "args": [
+    "read",
+    "$['foo']"
+   ],
+   "document": "store",
+   "stdout": "\"bar\"\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "OptionsTest",
+   "args": [
+    "compile",
+    "$.['a', 'b']"
+   ],
+   "stdout": "$['a','b']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "OptionsTest",
+   "args": [
+    "read",
+    "$.['a', 'b']"
+   ],
+   "document": "store",
+   "stdout": "{}\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "OptionsTest",
+   "args": [
+    "compile",
+    "$[*].a"
+   ],
+   "stdout": "$[*]['a']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "OptionsTest",
+   "args": [
+    "read",
+    "$[*].a"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "OptionsTest",
+   "args": [
+    "compile",
+    "$.*.a-key"
+   ],
+   "stdout": "$[*]['a-key']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "OptionsTest",
+   "args": [
+    "read",
+    "$.*.a-key"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "OptionsTest",
+   "args": [
+    "compile",
+    "$..foo2[0]"
+   ],
+   "stdout": "$..['foo2'][0]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "OptionsTest",
+   "args": [
+    "read",
+    "$..foo2[0]"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "OptionsTest",
+   "args": [
+    "compile",
+    "$..foo.foo2[0]"
+   ],
+   "stdout": "$..['foo']['foo2'][0]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "OptionsTest",
+   "args": [
+    "read",
+    "$..foo.foo2[0]"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "OptionsTest",
+   "args": [
+    "compile",
+    "$[*].foo2[0]"
+   ],
+   "stdout": "$[*]['foo2'][0]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "OptionsTest",
+   "args": [
+    "read",
+    "$[*].foo2[0]"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "OptionsTest",
+   "args": [
+    "compile",
+    "$.store.book.*.isbn"
+   ],
+   "stdout": "$['store']['book'][*]['isbn']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "OptionsTest",
+   "args": [
+    "read",
+    "$.store.book.*.isbn"
+   ],
+   "document": "store",
+   "stdout": "[\"0-553-21311-3\",\"0-395-19395-8\"]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "compile",
+    "$.["
+   ],
+   "stdout": "",
+   "stderr": "InvalidPathException: java.lang.StringIndexOutOfBoundsException: Index 3 out of bounds for length 3\n",
+   "status": 1
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "read",
+    "$.["
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "InvalidPathException: java.lang.StringIndexOutOfBoundsException: Index 3 out of bounds for length 3\n",
+   "status": 1
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "compile",
+    "$X"
+   ],
+   "stdout": "",
+   "stderr": "InvalidPathException: Illegal character at position 1 expected '.' or '['\n",
+   "status": 1
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "read",
+    "$X"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "InvalidPathException: Illegal character at position 1 expected '.' or '['\n",
+   "status": 1
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "compile",
+    "$"
+   ],
+   "stdout": "$\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "read",
+    "$"
+   ],
+   "document": "store",
+   "stdout": "{\"string-property\":\"string-value\",\"int-max-property\":\"\",\"long-max-property\":\"\",\"boolean-property\":true,\"null-property\":null,\"int-small-property\":1,\"max-price\":10,\"store\":{\"book\":[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}],\"bicycle\":{\"foo\":\"baz\",\"escape\":\"Esc\\b\\f\\n\\r\\t\\n\\t*\",\"color\":\"red\",\"display-price\":19.95,\"foo:bar\":\"fooBar\",\"dot.notation\":\"new\",\"dash-notation\":\"dashes\"}},\"foo\":\"bar\",\"@id\":\"ID\"}\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "compile",
+    "@"
+   ],
+   "stdout": "@\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "read",
+    "@"
+   ],
+   "document": "store",
+   "stdout": "{\"string-property\":\"string-value\",\"int-max-property\":\"\",\"long-max-property\":\"\",\"boolean-property\":true,\"null-property\":null,\"int-small-property\":1,\"max-price\":10,\"store\":{\"book\":[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}],\"bicycle\":{\"foo\":\"baz\",\"escape\":\"Esc\\b\\f\\n\\r\\t\\n\\t*\",\"color\":\"red\",\"display-price\":19.95,\"foo:bar\":\"fooBar\",\"dot.notation\":\"new\",\"dash-notation\":\"dashes\"}},\"foo\":\"bar\",\"@id\":\"ID\"}\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "compile",
+    "$."
+   ],
+   "stdout": "",
+   "stderr": "InvalidPathException: Path must not end with a '.' or '..'\n",
+   "status": 1
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "read",
+    "$."
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "InvalidPathException: Path must not end with a '.' or '..'\n",
+   "status": 1
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "compile",
+    "$.prop."
+   ],
+   "stdout": "",
+   "stderr": "InvalidPathException: Path must not end with a '.' or '..'\n",
+   "status": 1
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "read",
+    "$.prop."
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "InvalidPathException: Path must not end with a '.' or '..'\n",
+   "status": 1
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "compile",
+    "$.."
+   ],
+   "stdout": "",
+   "stderr": "InvalidPathException: Path must not end with a '.' or '..'\n",
+   "status": 1
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "read",
+    "$.."
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "InvalidPathException: Path must not end with a '.' or '..'\n",
+   "status": 1
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "compile",
+    "$.prop.."
+   ],
+   "stdout": "",
+   "stderr": "InvalidPathException: Path must not end with a '.' or '..'\n",
+   "status": 1
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "read",
+    "$.prop.."
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "InvalidPathException: Path must not end with a '.' or '..'\n",
+   "status": 1
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "compile",
+    "$.prop"
+   ],
+   "stdout": "$['prop']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "read",
+    "$.prop"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: No results for path: $['prop']\n",
+   "status": 1
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "compile",
+    "$['prop']"
+   ],
+   "stdout": "$['prop']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "read",
+    "$['prop']"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: No results for path: $['prop']\n",
+   "status": 1
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "compile",
+    "$.1prop"
+   ],
+   "stdout": "$['1prop']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "read",
+    "$.1prop"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: No results for path: $['1prop']\n",
+   "status": 1
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "compile",
+    "$['1prop']"
+   ],
+   "stdout": "$['1prop']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "read",
+    "$['1prop']"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: No results for path: $['1prop']\n",
+   "status": 1
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "compile",
+    "$.@prop"
+   ],
+   "stdout": "$['@prop']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "read",
+    "$.@prop"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: No results for path: $['@prop']\n",
+   "status": 1
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "compile",
+    "$['@prop']"
+   ],
+   "stdout": "$['@prop']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "read",
+    "$['@prop']"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: No results for path: $['@prop']\n",
+   "status": 1
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "compile",
+    "$[  '@prop'  ]"
+   ],
+   "stdout": "$['@prop']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "read",
+    "$[  '@prop'  ]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: No results for path: $['@prop']\n",
+   "status": 1
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "compile",
+    "$[\"prop\"]"
+   ],
+   "stdout": "$[\"prop\"]\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "read",
+    "$[\"prop\"]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: No results for path: $[\"prop\"]\n",
+   "status": 1
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "compile",
+    "$['prop0', 'prop1']"
+   ],
+   "stdout": "$['prop0','prop1']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "read",
+    "$['prop0', 'prop1']"
+   ],
+   "document": "store",
+   "stdout": "{}\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "compile",
+    "$['prop0','prop1']"
+   ],
+   "stdout": "$['prop0','prop1']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "read",
+    "$['prop0','prop1']"
+   ],
+   "document": "store",
+   "stdout": "{}\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "compile",
+    "$[  'prop0'  , 'prop1'  ]"
+   ],
+   "stdout": "$['prop0','prop1']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "read",
+    "$[  'prop0'  , 'prop1'  ]"
+   ],
+   "document": "store",
+   "stdout": "{}\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "compile",
+    "$.abc"
+   ],
+   "stdout": "$['abc']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "read",
+    "$.abc"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: No results for path: $['abc']\n",
+   "status": 1
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "compile",
+    "$['abc']"
+   ],
+   "stdout": "$['abc']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "read",
+    "$['abc']"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: No results for path: $['abc']\n",
+   "status": 1
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "compile",
+    "$.aaa.bbb"
+   ],
+   "stdout": "$['aaa']['bbb']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "read",
+    "$.aaa.bbb"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['aaa']\n",
+   "status": 1
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "compile",
+    "$['aaa']['bbb']"
+   ],
+   "stdout": "$['aaa']['bbb']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "read",
+    "$['aaa']['bbb']"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['aaa']\n",
+   "status": 1
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "compile",
+    "$.aaa.bbb.ccc"
+   ],
+   "stdout": "$['aaa']['bbb']['ccc']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "read",
+    "$.aaa.bbb.ccc"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['aaa']\n",
+   "status": 1
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "compile",
+    "$['aaa']['bbb']['ccc']"
+   ],
+   "stdout": "$['aaa']['bbb']['ccc']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PathCompilerTest",
+   "args": [
+    "read",
+    "$['aaa']['bbb']['ccc']"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['aaa']\n",
+   "status": 1
+  },
+  {
+   "suite": "PredicateTest",
+   "args": [
+    "compile",
+    "$.store.book[?].isbn"
+   ],
+   "stdout": "",
+   "stderr": "InvalidPathException: Not enough predicates supplied for filter [?] at position 12\n",
+   "status": 1
+  },
+  {
+   "suite": "PredicateTest",
+   "args": [
+    "read",
+    "$.store.book[?].isbn"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "InvalidPathException: Not enough predicates supplied for filter [?] at position 12\n",
+   "status": 1
+  },
+  {
+   "suite": "ReturnTypeTest",
+   "args": [
+    "compile",
+    "$.string-property"
+   ],
+   "stdout": "$['string-property']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ReturnTypeTest",
+   "args": [
+    "read",
+    "$.string-property"
+   ],
+   "document": "store",
+   "stdout": "\"string-value\"\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ReturnTypeTest",
+   "args": [
+    "compile",
+    "$.int-max-property"
+   ],
+   "stdout": "$['int-max-property']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ReturnTypeTest",
+   "args": [
+    "read",
+    "$.int-max-property"
+   ],
+   "document": "store",
+   "stdout": "\"\"\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ReturnTypeTest",
+   "args": [
+    "compile",
+    "$.long-max-property"
+   ],
+   "stdout": "$['long-max-property']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ReturnTypeTest",
+   "args": [
+    "read",
+    "$.long-max-property"
+   ],
+   "document": "store",
+   "stdout": "\"\"\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ReturnTypeTest",
+   "args": [
+    "compile",
+    "$.boolean-property"
+   ],
+   "stdout": "$['boolean-property']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ReturnTypeTest",
+   "args": [
+    "read",
+    "$.boolean-property"
+   ],
+   "document": "store",
+   "stdout": "true\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ReturnTypeTest",
+   "args": [
+    "compile",
+    "$.null-property"
+   ],
+   "stdout": "$['null-property']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ReturnTypeTest",
+   "args": [
+    "read",
+    "$.null-property"
+   ],
+   "document": "store",
+   "stdout": "null\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ReturnTypeTest",
+   "args": [
+    "compile",
+    "$.store.book"
+   ],
+   "stdout": "$['store']['book']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ReturnTypeTest",
+   "args": [
+    "read",
+    "$.store.book"
+   ],
+   "document": "store",
+   "stdout": "[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ReturnTypeTest",
+   "args": [
+    "compile",
+    "$.store.book[0]"
+   ],
+   "stdout": "$['store']['book'][0]\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ReturnTypeTest",
+   "args": [
+    "read",
+    "$.store.book[0]"
+   ],
+   "document": "store",
+   "stdout": "{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95}\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ReturnTypeTest",
+   "args": [
+    "compile",
+    "$..author"
+   ],
+   "stdout": "$..['author']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ReturnTypeTest",
+   "args": [
+    "read",
+    "$..author"
+   ],
+   "document": "store",
+   "stdout": "[\"Nigel Rees\",\"Evelyn Waugh\",\"Herman Melville\",\"J. R. R. Tolkien\"]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ReturnTypeTest",
+   "args": [
+    "compile",
+    "$['store']['book'][0]['author']"
+   ],
+   "stdout": "$['store']['book'][0]['author']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ReturnTypeTest",
+   "args": [
+    "read",
+    "$['store']['book'][0]['author']"
+   ],
+   "document": "store",
+   "stdout": "\"Nigel Rees\"\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ReturnTypeTest",
+   "args": [
+    "compile",
+    "$['store']['book'][1]['author']"
+   ],
+   "stdout": "$['store']['book'][1]['author']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ReturnTypeTest",
+   "args": [
+    "read",
+    "$['store']['book'][1]['author']"
+   ],
+   "document": "store",
+   "stdout": "\"Evelyn Waugh\"\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ReturnTypeTest",
+   "args": [
+    "compile",
+    "$['store']['book'][2]['author']"
+   ],
+   "stdout": "$['store']['book'][2]['author']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ReturnTypeTest",
+   "args": [
+    "read",
+    "$['store']['book'][2]['author']"
+   ],
+   "document": "store",
+   "stdout": "\"Herman Melville\"\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ReturnTypeTest",
+   "args": [
+    "compile",
+    "$['store']['book'][3]['author']"
+   ],
+   "stdout": "$['store']['book'][3]['author']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ReturnTypeTest",
+   "args": [
+    "read",
+    "$['store']['book'][3]['author']"
+   ],
+   "document": "store",
+   "stdout": "\"J. R. R. Tolkien\"\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ReturnTypeTest",
+   "args": [
+    "compile",
+    "$.store.book[0].author"
+   ],
+   "stdout": "$['store']['book'][0]['author']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ReturnTypeTest",
+   "args": [
+    "read",
+    "$.store.book[0].author"
+   ],
+   "document": "store",
+   "stdout": "\"Nigel Rees\"\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ScientificNotationTest",
+   "args": [
+    "compile",
+    "$.num_array[?(@.num == 1 || @.num == -1e-10 || @.num == 0.1e10 || @.num == 2E-20 || @.num == -0.2E20)]"
+   ],
+   "stdout": "$['num_array'][?]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ScientificNotationTest",
+   "args": [
+    "read",
+    "$.num_array[?(@.num == 1 || @.num == -1e-10 || @.num == 0.1e10 || @.num == 2E-20 || @.num == -0.2E20)]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['num_array']\n",
+   "status": 1
+  },
+  {
+   "suite": "ScientificNotationTest",
+   "args": [
+    "compile",
+    "$.num_array[?(@.num > -0.0E0)]"
+   ],
+   "stdout": "$['num_array'][?]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ScientificNotationTest",
+   "args": [
+    "read",
+    "$.num_array[?(@.num > -0.0E0)]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['num_array']\n",
+   "status": 1
+  },
+  {
+   "suite": "ScientificNotationTest",
+   "args": [
+    "compile",
+    "$.num_array[?(@.num < -0.0E0)]"
+   ],
+   "stdout": "$['num_array'][?]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ScientificNotationTest",
+   "args": [
+    "read",
+    "$.num_array[?(@.num < -0.0E0)]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['num_array']\n",
+   "status": 1
+  },
+  {
+   "suite": "TestSuppressExceptions",
+   "args": [
+    "compile",
+    "$.missing"
+   ],
+   "stdout": "$['missing']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "TestSuppressExceptions",
+   "args": [
+    "read",
+    "$.missing"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: No results for path: $['missing']\n",
+   "status": 1
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "compile",
+    "$.store.book[*].display-price"
+   ],
+   "stdout": "$['store']['book'][*]['display-price']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "read",
+    "$.store.book[*].display-price"
+   ],
+   "document": "store",
+   "stdout": "[8.95,12.99,8.99,22.99]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "compile",
+    "$.int-max-property"
+   ],
+   "stdout": "$['int-max-property']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "read",
+    "$.int-max-property"
+   ],
+   "document": "store",
+   "stdout": "\"\"\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "compile",
+    "$..display-price"
+   ],
+   "stdout": "$..['display-price']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "read",
+    "$..display-price"
+   ],
+   "document": "store",
+   "stdout": "[8.95,12.99,8.99,22.99,19.95]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "compile",
+    "$.store.book[?(@.display-price)].display-price"
+   ],
+   "stdout": "$['store']['book'][?]['display-price']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "read",
+    "$.store.book[?(@.display-price)].display-price"
+   ],
+   "document": "store",
+   "stdout": "[8.95,12.99,8.99,22.99]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "compile",
+    "$.store.book[*].category"
+   ],
+   "stdout": "$['store']['book'][*]['category']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "read",
+    "$.store.book[*].category"
+   ],
+   "document": "store",
+   "stdout": "[\"reference\",\"fiction\",\"fiction\",\"fiction\"]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "compile",
+    "$[?(@ == 1)]"
+   ],
+   "stdout": "$[?]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "read",
+    "$[?(@ == 1)]"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "compile",
+    "$.store.book[0]"
+   ],
+   "stdout": "$['store']['book'][0]\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "read",
+    "$.store.book[0]"
+   ],
+   "document": "store",
+   "stdout": "{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95}\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "compile",
+    "$.store.book[0:2]"
+   ],
+   "stdout": "$['store']['book'][0:2]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "read",
+    "$.store.book[0:2]"
+   ],
+   "document": "store",
+   "stdout": "[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99}]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "compile",
+    "$.store.book[?(@.category == 'fiction')]"
+   ],
+   "stdout": "$['store']['book'][?]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "read",
+    "$.store.book[?(@.category == 'fiction')]"
+   ],
+   "document": "store",
+   "stdout": "[{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "compile",
+    "$.store.book[?(@ == 'a')]"
+   ],
+   "stdout": "$['store']['book'][?]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "read",
+    "$.store.book[?(@ == 'a')]"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "compile",
+    "$._embedded.mandates[?(@.count=~/0/)]"
+   ],
+   "stdout": "$['_embedded']['mandates'][?]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "read",
+    "$._embedded.mandates[?(@.count=~/0/)]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['_embedded']\n",
+   "status": 1
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "compile",
+    "$.store.book[*]['author', 'category']"
+   ],
+   "stdout": "$['store']['book'][*]['author','category']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "read",
+    "$.store.book[*]['author', 'category']"
+   ],
+   "document": "store",
+   "stdout": "[{\"author\":\"Nigel Rees\",\"category\":\"reference\"},{\"author\":\"Evelyn Waugh\",\"category\":\"fiction\"},{\"author\":\"Herman Melville\",\"category\":\"fiction\"},{\"author\":\"J. R. R. Tolkien\",\"category\":\"fiction\"}]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "compile",
+    "$.store.book[*]['author', 'isbn']"
+   ],
+   "stdout": "$['store']['book'][*]['author','isbn']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "read",
+    "$.store.book[*]['author', 'isbn']"
+   ],
+   "document": "store",
+   "stdout": "[{\"author\":\"Nigel Rees\"},{\"author\":\"Evelyn Waugh\"},{\"author\":\"Herman Melville\",\"isbn\":\"0-553-21311-3\"},{\"author\":\"J. R. R. Tolkien\",\"isbn\":\"0-395-19395-8\"}]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "compile",
+    "$.store.book"
+   ],
+   "stdout": "$['store']['book']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "read",
+    "$.store.book"
+   ],
+   "document": "store",
+   "stdout": "[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "compile",
+    "$.store.book[4]"
+   ],
+   "stdout": "$['store']['book'][4]\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "read",
+    "$.store.book[4]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: No results for path: $['store']['book'][4]\n",
+   "status": 1
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "compile",
+    "$.store.book[0].new-key"
+   ],
+   "stdout": "$['store']['book'][0]['new-key']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "read",
+    "$.store.book[0].new-key"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: No results for path: $['store']['book'][0]['new-key']\n",
+   "status": 1
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "compile",
+    "$"
+   ],
+   "stdout": "$\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "read",
+    "$"
+   ],
+   "document": "store",
+   "stdout": "{\"string-property\":\"string-value\",\"int-max-property\":\"\",\"long-max-property\":\"\",\"boolean-property\":true,\"null-property\":null,\"int-small-property\":1,\"max-price\":10,\"store\":{\"book\":[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}],\"bicycle\":{\"foo\":\"baz\",\"escape\":\"Esc\\b\\f\\n\\r\\t\\n\\t*\",\"color\":\"red\",\"display-price\":19.95,\"foo:bar\":\"fooBar\",\"dot.notation\":\"new\",\"dash-notation\":\"dashes\"}},\"foo\":\"bar\",\"@id\":\"ID\"}\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "compile",
+    "$.new-key"
+   ],
+   "stdout": "$['new-key']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "read",
+    "$.new-key"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: No results for path: $['new-key']\n",
+   "status": 1
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "compile",
+    "$[?(@.a == 'a-val')]"
+   ],
+   "stdout": "$[?]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "read",
+    "$[?(@.a == 'a-val')]"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "compile",
+    "$.store"
+   ],
+   "stdout": "$['store']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "read",
+    "$.store"
+   ],
+   "document": "store",
+   "stdout": "{\"book\":[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}],\"bicycle\":{\"foo\":\"baz\",\"escape\":\"Esc\\b\\f\\n\\r\\t\\n\\t*\",\"color\":\"red\",\"display-price\":19.95,\"foo:bar\":\"fooBar\",\"dot.notation\":\"new\",\"dash-notation\":\"dashes\"}}\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "compile",
+    "$.store.updated-book"
+   ],
+   "stdout": "$['store']['updated-book']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "read",
+    "$.store.updated-book"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: No results for path: $['store']['updated-book']\n",
+   "status": 1
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "compile",
+    "$.new-store[*]"
+   ],
+   "stdout": "$['new-store'][*]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "read",
+    "$.new-store[*]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['new-store']\n",
+   "status": 1
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "compile",
+    "$.store.book[*]"
+   ],
+   "stdout": "$['store']['book'][*]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "read",
+    "$.store.book[*]"
+   ],
+   "document": "store",
+   "stdout": "[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "compile",
+    "$.store.book[*].renamed-category"
+   ],
+   "stdout": "$['store']['book'][*]['renamed-category']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "read",
+    "$.store.book[*].renamed-category"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "compile",
+    "$[*]"
+   ],
+   "stdout": "$[*]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "WriteTest",
+   "args": [
+    "read",
+    "$[*]"
+   ],
+   "document": "store",
+   "stdout": "[\"string-value\",\"\",\"\",true,null,1,10,{\"book\":[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}],\"bicycle\":{\"foo\":\"baz\",\"escape\":\"Esc\\b\\f\\n\\r\\t\\n\\t*\",\"color\":\"red\",\"display-price\":19.95,\"foo:bar\":\"fooBar\",\"dot.notation\":\"new\",\"dash-notation\":\"dashes\"}},\"bar\",\"ID\"]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonContextTest",
+   "args": [
+    "compile",
+    "$.store.book[?].category"
+   ],
+   "stdout": "",
+   "stderr": "InvalidPathException: Not enough predicates supplied for filter [?] at position 12\n",
+   "status": 1
+  },
+  {
+   "suite": "JsonContextTest",
+   "args": [
+    "read",
+    "$.store.book[?].category"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "InvalidPathException: Not enough predicates supplied for filter [?] at position 12\n",
+   "status": 1
+  },
+  {
+   "suite": "Issue191",
+   "args": [
+    "compile",
+    "$.sum($..timestamp)"
+   ],
+   "stdout": "$.sum(...)\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "Issue191",
+   "args": [
+    "read",
+    "$.sum($..timestamp)"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "JsonPathException: Aggregation function attempted to calculate value using empty array\n",
+   "status": 1
+  },
+  {
+   "suite": "Issue191",
+   "args": [
+    "compile",
+    "$..timestamp.sum()"
+   ],
+   "stdout": "$.sum()\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "Issue191",
+   "args": [
+    "read",
+    "$..timestamp.sum()"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "JsonPathException: Aggregation function attempted to calculate value using empty array\n",
+   "status": 1
+  },
+  {
+   "suite": "Issue191",
+   "args": [
+    "compile",
+    "$.max($..timestamp.avg(), $..timestamp.stddev())"
+   ],
+   "stdout": "$.max(...)\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "Issue191",
+   "args": [
+    "read",
+    "$.max($..timestamp.avg(), $..timestamp.stddev())"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "JsonPathException: Aggregation function attempted to calculate value using empty array\n",
+   "status": 1
+  },
+  {
+   "suite": "Issue191",
+   "args": [
+    "compile",
+    "$.sum($..timestamp, $..cpus)"
+   ],
+   "stdout": "$.sum(...)\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "Issue191",
+   "args": [
+    "read",
+    "$.sum($..timestamp, $..cpus)"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "JsonPathException: Aggregation function attempted to calculate value using empty array\n",
+   "status": 1
+  },
+  {
+   "suite": "Issue191",
+   "args": [
+    "compile",
+    "$.concat($..state)"
+   ],
+   "stdout": "$.concat(...)\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "Issue191",
+   "args": [
+    "read",
+    "$.concat($..state)"
+   ],
+   "document": "store",
+   "stdout": "\"\"\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "Issue191",
+   "args": [
+    "compile",
+    "$.concat($..cpus)"
+   ],
+   "stdout": "$.concat(...)\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "Issue191",
+   "args": [
+    "read",
+    "$.concat($..cpus)"
+   ],
+   "document": "store",
+   "stdout": "\"\"\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "Issue273",
+   "args": [
+    "compile",
+    "$..[2].author"
+   ],
+   "stdout": "$..[2]['author']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "Issue273",
+   "args": [
+    "read",
+    "$..[2].author"
+   ],
+   "document": "store",
+   "stdout": "[\"Herman Melville\"]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "Issue612",
+   "args": [
+    "compile",
+    "$.1.2.a.b.c"
+   ],
+   "stdout": "$['1']['2']['a']['b']['c']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "Issue612",
+   "args": [
+    "read",
+    "$.1.2.a.b.c"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['1']\n",
+   "status": 1
+  },
+  {
+   "suite": "Issue629",
+   "args": [
+    "compile",
+    "$.A.B.C.D("
+   ],
+   "stdout": "",
+   "stderr": "InvalidPathException: Arguments to function: 'D' are not closed properly.\n",
+   "status": 1
+  },
+  {
+   "suite": "Issue629",
+   "args": [
+    "read",
+    "$.A.B.C.D("
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "InvalidPathException: Arguments to function: 'D' are not closed properly.\n",
+   "status": 1
+  },
+  {
+   "suite": "Issue629",
+   "args": [
+    "compile",
+    "$.A.B.C.sum(D()"
+   ],
+   "stdout": "",
+   "stderr": "InvalidPathException: Arguments to function: 'sum' are not closed properly.\n",
+   "status": 1
+  },
+  {
+   "suite": "Issue629",
+   "args": [
+    "read",
+    "$.A.B.C.sum(D()"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "InvalidPathException: Arguments to function: 'sum' are not closed properly.\n",
+   "status": 1
+  },
+  {
+   "suite": "JSONEntityPathFunctionTest",
+   "args": [
+    "compile",
+    "$['text'].length()"
+   ],
+   "stdout": "$['text'].length()\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JSONEntityPathFunctionTest",
+   "args": [
+    "read",
+    "$['text'].length()"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['text']\n",
+   "status": 1
+  },
+  {
+   "suite": "JSONEntityPathFunctionTest",
+   "args": [
+    "compile",
+    "$['text'].size()"
+   ],
+   "stdout": "$['text'].size()\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JSONEntityPathFunctionTest",
+   "args": [
+    "read",
+    "$['text'].size()"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['text']\n",
+   "status": 1
+  },
+  {
+   "suite": "JSONEntityPathFunctionTest",
+   "args": [
+    "compile",
+    "$.numbers.length()"
+   ],
+   "stdout": "$['numbers'].length()\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JSONEntityPathFunctionTest",
+   "args": [
+    "read",
+    "$.numbers.length()"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['numbers']\n",
+   "status": 1
+  },
+  {
+   "suite": "JSONEntityPathFunctionTest",
+   "args": [
+    "compile",
+    "$.numbers.size()"
+   ],
+   "stdout": "$['numbers'].size()\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JSONEntityPathFunctionTest",
+   "args": [
+    "read",
+    "$.numbers.size()"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['numbers']\n",
+   "status": 1
+  },
+  {
+   "suite": "JSONEntityPathFunctionTest",
+   "args": [
+    "compile",
+    "$.batches.length()"
+   ],
+   "stdout": "$['batches'].length()\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JSONEntityPathFunctionTest",
+   "args": [
+    "read",
+    "$.batches.length()"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['batches']\n",
+   "status": 1
+  },
+  {
+   "suite": "JSONEntityPathFunctionTest",
+   "args": [
+    "compile",
+    "$.batches.results[?(@.values.length() >= $.batches.minBatchSize)].values.avg()"
+   ],
+   "stdout": "$['batches']['results'][?]['values'].avg()\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JSONEntityPathFunctionTest",
+   "args": [
+    "read",
+    "$.batches.results[?(@.values.length() >= $.batches.minBatchSize)].values.avg()"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['batches']\n",
+   "status": 1
+  },
+  {
+   "suite": "JSONEntityPathFunctionTest",
+   "args": [
+    "compile",
+    "$.batches.results[?(@.values.length() >= 3)].values.avg()"
+   ],
+   "stdout": "$['batches']['results'][?]['values'].avg()\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JSONEntityPathFunctionTest",
+   "args": [
+    "read",
+    "$.batches.results[?(@.values.length() >= 3)].values.avg()"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['batches']\n",
+   "status": 1
+  },
+  {
+   "suite": "KeySetFunctionTest",
+   "args": [
+    "compile",
+    "$.data.keys()"
+   ],
+   "stdout": "$['data'].keys()\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "KeySetFunctionTest",
+   "args": [
+    "read",
+    "$.data.keys()"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['data']\n",
+   "status": 1
+  },
+  {
+   "suite": "NestedFunctionTest",
+   "args": [
+    "compile",
+    "$.avg($.numbers.min(), $.numbers.max())"
+   ],
+   "stdout": "$.avg(...)\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "NestedFunctionTest",
+   "args": [
+    "read",
+    "$.avg($.numbers.min(), $.numbers.max())"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['numbers']\n",
+   "status": 1
+  },
+  {
+   "suite": "NestedFunctionTest",
+   "args": [
+    "compile",
+    "$.numbers.avg()"
+   ],
+   "stdout": "$['numbers'].avg()\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "NestedFunctionTest",
+   "args": [
+    "read",
+    "$.numbers.avg()"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['numbers']\n",
+   "status": 1
+  },
+  {
+   "suite": "NestedFunctionTest",
+   "args": [
+    "compile",
+    "$.numbers.sum($.numbers.min(), $.numbers.max())"
+   ],
+   "stdout": "$['numbers'].sum(...)\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "NestedFunctionTest",
+   "args": [
+    "read",
+    "$.numbers.sum($.numbers.min(), $.numbers.max())"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['numbers']\n",
+   "status": 1
+  },
+  {
+   "suite": "NestedFunctionTest",
+   "args": [
+    "compile",
+    "$.sum(5, 3, $.numbers.max(), 2)"
+   ],
+   "stdout": "$.sum(...)\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "NestedFunctionTest",
+   "args": [
+    "read",
+    "$.sum(5, 3, $.numbers.max(), 2)"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['numbers']\n",
+   "status": 1
+  },
+  {
+   "suite": "NestedFunctionTest",
+   "args": [
+    "compile",
+    "$.sum(5)"
+   ],
+   "stdout": "$.sum(...)\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "NestedFunctionTest",
+   "args": [
+    "read",
+    "$.sum(5)"
+   ],
+   "document": "store",
+   "stdout": "5.0\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "NestedFunctionTest",
+   "args": [
+    "compile",
+    "$.sum(50)"
+   ],
+   "stdout": "$.sum(...)\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "NestedFunctionTest",
+   "args": [
+    "read",
+    "$.sum(50)"
+   ],
+   "document": "store",
+   "stdout": "50.0\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "NestedFunctionTest",
+   "args": [
+    "compile",
+    "$.text.concat()"
+   ],
+   "stdout": "$['text'].concat()\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "NestedFunctionTest",
+   "args": [
+    "read",
+    "$.text.concat()"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['text']\n",
+   "status": 1
+  },
+  {
+   "suite": "NestedFunctionTest",
+   "args": [
+    "compile",
+    "$.concat($.text[0], $.numbers[0])"
+   ],
+   "stdout": "$.concat(...)\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "NestedFunctionTest",
+   "args": [
+    "read",
+    "$.concat($.text[0], $.numbers[0])"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['text']\n",
+   "status": 1
+  },
+  {
+   "suite": "NestedFunctionTest",
+   "args": [
+    "compile",
+    "$.text.concat(\"-\", \"ghijk\")"
+   ],
+   "stdout": "$['text'].concat(...)\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "NestedFunctionTest",
+   "args": [
+    "read",
+    "$.text.concat(\"-\", \"ghijk\")"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['text']\n",
+   "status": 1
+  },
+  {
+   "suite": "NestedFunctionTest",
+   "args": [
+    "compile",
+    "$.numbers.append(11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 0).avg()"
+   ],
+   "stdout": "$['numbers'].append(...).avg()\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "NestedFunctionTest",
+   "args": [
+    "read",
+    "$.numbers.append(11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 0).avg()"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['numbers']\n",
+   "status": 1
+  },
+  {
+   "suite": "NestedFunctionTest",
+   "args": [
+    "compile",
+    "$.numbers.append(\"0\", \"11\").sum()"
+   ],
+   "stdout": "$['numbers'].append(...).sum()\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "NestedFunctionTest",
+   "args": [
+    "read",
+    "$.numbers.append(\"0\", \"11\").sum()"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['numbers']\n",
+   "status": 1
+  },
+  {
+   "suite": "NestedFunctionTest",
+   "args": [
+    "compile",
+    "$.numbers.append(0, 1, 2}).avg()"
+   ],
+   "stdout": "",
+   "stderr": "InvalidPathException: Unexpected close brace '}' at character position: 25\n",
+   "status": 1
+  },
+  {
+   "suite": "NestedFunctionTest",
+   "args": [
+    "read",
+    "$.numbers.append(0, 1, 2}).avg()"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "InvalidPathException: Unexpected close brace '}' at character position: 25\n",
+   "status": 1
+  },
+  {
+   "suite": "NestedFunctionTest",
+   "args": [
+    "compile",
+    "$.numbers.append(0, 1, 2]).avg()"
+   ],
+   "stdout": "",
+   "stderr": "InvalidPathException: Unexpected close bracket ']' at character position: 25\n",
+   "status": 1
+  },
+  {
+   "suite": "NestedFunctionTest",
+   "args": [
+    "read",
+    "$.numbers.append(0, 1, 2]).avg()"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "InvalidPathException: Unexpected close bracket ']' at character position: 25\n",
+   "status": 1
+  },
+  {
+   "suite": "NestedFunctionTest",
+   "args": [
+    "compile",
+    "$.numbers.append(0, 1, 2"
+   ],
+   "stdout": "",
+   "stderr": "InvalidPathException: Arguments to function: 'append' are not closed properly.\n",
+   "status": 1
+  },
+  {
+   "suite": "NestedFunctionTest",
+   "args": [
+    "read",
+    "$.numbers.append(0, 1, 2"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "InvalidPathException: Arguments to function: 'append' are not closed properly.\n",
+   "status": 1
+  },
+  {
+   "suite": "NumericPathFunctionTest",
+   "args": [
+    "compile",
+    "$.numbers.avg()"
+   ],
+   "stdout": "$['numbers'].avg()\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "NumericPathFunctionTest",
+   "args": [
+    "read",
+    "$.numbers.avg()"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['numbers']\n",
+   "status": 1
+  },
+  {
+   "suite": "NumericPathFunctionTest",
+   "args": [
+    "compile",
+    "$.empty.avg()"
+   ],
+   "stdout": "$['empty'].avg()\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "NumericPathFunctionTest",
+   "args": [
+    "read",
+    "$.empty.avg()"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['empty']\n",
+   "status": 1
+  },
+  {
+   "suite": "NumericPathFunctionTest",
+   "args": [
+    "compile",
+    "$.numbers.sum()"
+   ],
+   "stdout": "$['numbers'].sum()\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "NumericPathFunctionTest",
+   "args": [
+    "read",
+    "$.numbers.sum()"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['numbers']\n",
+   "status": 1
+  },
+  {
+   "suite": "NumericPathFunctionTest",
+   "args": [
+    "compile",
+    "$.empty.sum()"
+   ],
+   "stdout": "$['empty'].sum()\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "NumericPathFunctionTest",
+   "args": [
+    "read",
+    "$.empty.sum()"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['empty']\n",
+   "status": 1
+  },
+  {
+   "suite": "NumericPathFunctionTest",
+   "args": [
+    "compile",
+    "$.numbers.max()"
+   ],
+   "stdout": "$['numbers'].max()\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "NumericPathFunctionTest",
+   "args": [
+    "read",
+    "$.numbers.max()"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['numbers']\n",
+   "status": 1
+  },
+  {
+   "suite": "NumericPathFunctionTest",
+   "args": [
+    "compile",
+    "$.empty.max()"
+   ],
+   "stdout": "$['empty'].max()\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "NumericPathFunctionTest",
+   "args": [
+    "read",
+    "$.empty.max()"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['empty']\n",
+   "status": 1
+  },
+  {
+   "suite": "NumericPathFunctionTest",
+   "args": [
+    "compile",
+    "$.numbers.min()"
+   ],
+   "stdout": "$['numbers'].min()\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "NumericPathFunctionTest",
+   "args": [
+    "read",
+    "$.numbers.min()"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['numbers']\n",
+   "status": 1
+  },
+  {
+   "suite": "NumericPathFunctionTest",
+   "args": [
+    "compile",
+    "$.empty.min()"
+   ],
+   "stdout": "$['empty'].min()\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "NumericPathFunctionTest",
+   "args": [
+    "read",
+    "$.empty.min()"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['empty']\n",
+   "status": 1
+  },
+  {
+   "suite": "NumericPathFunctionTest",
+   "args": [
+    "compile",
+    "$.numbers.stddev()"
+   ],
+   "stdout": "$['numbers'].stddev()\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "NumericPathFunctionTest",
+   "args": [
+    "read",
+    "$.numbers.stddev()"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['numbers']\n",
+   "status": 1
+  },
+  {
+   "suite": "NumericPathFunctionTest",
+   "args": [
+    "compile",
+    "$.empty.stddev()"
+   ],
+   "stdout": "$['empty'].stddev()\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "NumericPathFunctionTest",
+   "args": [
+    "read",
+    "$.empty.stddev()"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['empty']\n",
+   "status": 1
+  },
+  {
+   "suite": "NumericPathFunctionTest",
+   "args": [
+    "compile",
+    "$.numbers.foo()"
+   ],
+   "stdout": "$['numbers'].foo()\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "NumericPathFunctionTest",
+   "args": [
+    "read",
+    "$.numbers.foo()"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['numbers']\n",
+   "status": 1
+  },
+  {
+   "suite": "SequentialPathFunctionTest",
+   "args": [
+    "compile",
+    "$.numbers.first()"
+   ],
+   "stdout": "$['numbers'].first()\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "SequentialPathFunctionTest",
+   "args": [
+    "read",
+    "$.numbers.first()"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['numbers']\n",
+   "status": 1
+  },
+  {
+   "suite": "SequentialPathFunctionTest",
+   "args": [
+    "compile",
+    "$.numbers.last()"
+   ],
+   "stdout": "$['numbers'].last()\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "SequentialPathFunctionTest",
+   "args": [
+    "read",
+    "$.numbers.last()"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['numbers']\n",
+   "status": 1
+  },
+  {
+   "suite": "SequentialPathFunctionTest",
+   "args": [
+    "compile",
+    "$.numbers.index(0)"
+   ],
+   "stdout": "$['numbers'].index(...)\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "SequentialPathFunctionTest",
+   "args": [
+    "read",
+    "$.numbers.index(0)"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['numbers']\n",
+   "status": 1
+  },
+  {
+   "suite": "SequentialPathFunctionTest",
+   "args": [
+    "compile",
+    "$.numbers.index(-1)"
+   ],
+   "stdout": "$['numbers'].index(...)\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "SequentialPathFunctionTest",
+   "args": [
+    "read",
+    "$.numbers.index(-1)"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['numbers']\n",
+   "status": 1
+  },
+  {
+   "suite": "SequentialPathFunctionTest",
+   "args": [
+    "compile",
+    "$.numbers.index(1)"
+   ],
+   "stdout": "$['numbers'].index(...)\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "SequentialPathFunctionTest",
+   "args": [
+    "read",
+    "$.numbers.index(1)"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['numbers']\n",
+   "status": 1
+  },
+  {
+   "suite": "SequentialPathFunctionTest",
+   "args": [
+    "compile",
+    "$.text.first()"
+   ],
+   "stdout": "$['text'].first()\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "SequentialPathFunctionTest",
+   "args": [
+    "read",
+    "$.text.first()"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['text']\n",
+   "status": 1
+  },
+  {
+   "suite": "SequentialPathFunctionTest",
+   "args": [
+    "compile",
+    "$.text.last()"
+   ],
+   "stdout": "$['text'].last()\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "SequentialPathFunctionTest",
+   "args": [
+    "read",
+    "$.text.last()"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['text']\n",
+   "status": 1
+  },
+  {
+   "suite": "SequentialPathFunctionTest",
+   "args": [
+    "compile",
+    "$.text.index(0)"
+   ],
+   "stdout": "$['text'].index(...)\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "SequentialPathFunctionTest",
+   "args": [
+    "read",
+    "$.text.index(0)"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['text']\n",
+   "status": 1
+  },
+  {
+   "suite": "SequentialPathFunctionTest",
+   "args": [
+    "compile",
+    "$.text.index(-1)"
+   ],
+   "stdout": "$['text'].index(...)\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "SequentialPathFunctionTest",
+   "args": [
+    "read",
+    "$.text.index(-1)"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['text']\n",
+   "status": 1
+  },
+  {
+   "suite": "SequentialPathFunctionTest",
+   "args": [
+    "compile",
+    "$.text.index(1)"
+   ],
+   "stdout": "$['text'].index(...)\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "SequentialPathFunctionTest",
+   "args": [
+    "read",
+    "$.text.index(1)"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['text']\n",
+   "status": 1
+  },
+  {
+   "suite": "ArraySlicingTest",
+   "args": [
+    "compile",
+    "$[3]"
+   ],
+   "stdout": "$[3]\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ArraySlicingTest",
+   "args": [
+    "read",
+    "$[3]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Filter: [3] can only be applied to arrays. Current context is: {string-property=string-value, int-max-property=, long-max-property=, boolean-property=true, null-property=null, int-small-property=1, max-price=10, store={book=[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}], bicycle={foo=baz, escape=Esc\b\f\n\r\t\n\t*, color=red, display-price=19.95, foo:bar=fooBar, dot.notation=new, dash-notation=dashes}}, foo=bar, @id=ID}\n",
+   "status": 1
+  },
+  {
+   "suite": "ArraySlicingTest",
+   "args": [
+    "compile",
+    "$[:3]"
+   ],
+   "stdout": "$[:3]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ArraySlicingTest",
+   "args": [
+    "read",
+    "$[:3]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Filter: [:3] can only be applied to arrays. Current context is: {string-property=string-value, int-max-property=, long-max-property=, boolean-property=true, null-property=null, int-small-property=1, max-price=10, store={book=[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}], bicycle={foo=baz, escape=Esc\b\f\n\r\t\n\t*, color=red, display-price=19.95, foo:bar=fooBar, dot.notation=new, dash-notation=dashes}}, foo=bar, @id=ID}\n",
+   "status": 1
+  },
+  {
+   "suite": "ArraySlicingTest",
+   "args": [
+    "compile",
+    "$[1:5]"
+   ],
+   "stdout": "$[1:5]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ArraySlicingTest",
+   "args": [
+    "read",
+    "$[1:5]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Filter: [1:5] can only be applied to arrays. Current context is: {string-property=string-value, int-max-property=, long-max-property=, boolean-property=true, null-property=null, int-small-property=1, max-price=10, store={book=[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}], bicycle={foo=baz, escape=Esc\b\f\n\r\t\n\t*, color=red, display-price=19.95, foo:bar=fooBar, dot.notation=new, dash-notation=dashes}}, foo=bar, @id=ID}\n",
+   "status": 1
+  },
+  {
+   "suite": "ArraySlicingTest",
+   "args": [
+    "compile",
+    "$[0:1]"
+   ],
+   "stdout": "$[0:1]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ArraySlicingTest",
+   "args": [
+    "read",
+    "$[0:1]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Filter: [0:1] can only be applied to arrays. Current context is: {string-property=string-value, int-max-property=, long-max-property=, boolean-property=true, null-property=null, int-small-property=1, max-price=10, store={book=[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}], bicycle={foo=baz, escape=Esc\b\f\n\r\t\n\t*, color=red, display-price=19.95, foo:bar=fooBar, dot.notation=new, dash-notation=dashes}}, foo=bar, @id=ID}\n",
+   "status": 1
+  },
+  {
+   "suite": "ArraySlicingTest",
+   "args": [
+    "compile",
+    "$[0:2]"
+   ],
+   "stdout": "$[0:2]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ArraySlicingTest",
+   "args": [
+    "read",
+    "$[0:2]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Filter: [0:2] can only be applied to arrays. Current context is: {string-property=string-value, int-max-property=, long-max-property=, boolean-property=true, null-property=null, int-small-property=1, max-price=10, store={book=[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}], bicycle={foo=baz, escape=Esc\b\f\n\r\t\n\t*, color=red, display-price=19.95, foo:bar=fooBar, dot.notation=new, dash-notation=dashes}}, foo=bar, @id=ID}\n",
+   "status": 1
+  },
+  {
+   "suite": "ArraySlicingTest",
+   "args": [
+    "compile",
+    "$[1:15]"
+   ],
+   "stdout": "$[1:15]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ArraySlicingTest",
+   "args": [
+    "read",
+    "$[1:15]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Filter: [1:15] can only be applied to arrays. Current context is: {string-property=string-value, int-max-property=, long-max-property=, boolean-property=true, null-property=null, int-small-property=1, max-price=10, store={book=[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}], bicycle={foo=baz, escape=Esc\b\f\n\r\t\n\t*, color=red, display-price=19.95, foo:bar=fooBar, dot.notation=new, dash-notation=dashes}}, foo=bar, @id=ID}\n",
+   "status": 1
+  },
+  {
+   "suite": "ArraySlicingTest",
+   "args": [
+    "compile",
+    "$[-3:]"
+   ],
+   "stdout": "$[-3:]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ArraySlicingTest",
+   "args": [
+    "read",
+    "$[-3:]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Filter: [-3:] can only be applied to arrays. Current context is: {string-property=string-value, int-max-property=, long-max-property=, boolean-property=true, null-property=null, int-small-property=1, max-price=10, store={book=[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}], bicycle={foo=baz, escape=Esc\b\f\n\r\t\n\t*, color=red, display-price=19.95, foo:bar=fooBar, dot.notation=new, dash-notation=dashes}}, foo=bar, @id=ID}\n",
+   "status": 1
+  },
+  {
+   "suite": "ArraySlicingTest",
+   "args": [
+    "compile",
+    "$[3:]"
+   ],
+   "stdout": "$[3:]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ArraySlicingTest",
+   "args": [
+    "read",
+    "$[3:]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Filter: [3:] can only be applied to arrays. Current context is: {string-property=string-value, int-max-property=, long-max-property=, boolean-property=true, null-property=null, int-small-property=1, max-price=10, store={book=[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}], bicycle={foo=baz, escape=Esc\b\f\n\r\t\n\t*, color=red, display-price=19.95, foo:bar=fooBar, dot.notation=new, dash-notation=dashes}}, foo=bar, @id=ID}\n",
+   "status": 1
+  },
+  {
+   "suite": "ArraySlicingTest",
+   "args": [
+    "compile",
+    "$[0,1,2]"
+   ],
+   "stdout": "$[0,1,2]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ArraySlicingTest",
+   "args": [
+    "read",
+    "$[0,1,2]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Filter: [0,1,2] can only be applied to arrays. Current context is: {string-property=string-value, int-max-property=, long-max-property=, boolean-property=true, null-property=null, int-small-property=1, max-price=10, store={book=[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}], bicycle={foo=baz, escape=Esc\b\f\n\r\t\n\t*, color=red, display-price=19.95, foo:bar=fooBar, dot.notation=new, dash-notation=dashes}}, foo=bar, @id=ID}\n",
+   "status": 1
+  },
+  {
+   "suite": "ComplianceTest",
+   "args": [
+    "compile",
+    "$.a"
+   ],
+   "stdout": "$['a']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ComplianceTest",
+   "args": [
+    "read",
+    "$.a"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: No results for path: $['a']\n",
+   "status": 1
+  },
+  {
+   "suite": "ComplianceTest",
+   "args": [
+    "compile",
+    "$.*"
+   ],
+   "stdout": "$[*]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ComplianceTest",
+   "args": [
+    "read",
+    "$.*"
+   ],
+   "document": "store",
+   "stdout": "[\"string-value\",\"\",\"\",true,null,1,10,{\"book\":[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}],\"bicycle\":{\"foo\":\"baz\",\"escape\":\"Esc\\b\\f\\n\\r\\t\\n\\t*\",\"color\":\"red\",\"display-price\":19.95,\"foo:bar\":\"fooBar\",\"dot.notation\":\"new\",\"dash-notation\":\"dashes\"}},\"bar\",\"ID\"]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ComplianceTest",
+   "args": [
+    "compile",
+    "$[*]"
+   ],
+   "stdout": "$[*]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ComplianceTest",
+   "args": [
+    "read",
+    "$[*]"
+   ],
+   "document": "store",
+   "stdout": "[\"string-value\",\"\",\"\",true,null,1,10,{\"book\":[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}],\"bicycle\":{\"foo\":\"baz\",\"escape\":\"Esc\\b\\f\\n\\r\\t\\n\\t*\",\"color\":\"red\",\"display-price\":19.95,\"foo:bar\":\"fooBar\",\"dot.notation\":\"new\",\"dash-notation\":\"dashes\"}},\"bar\",\"ID\"]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ComplianceTest",
+   "args": [
+    "compile",
+    "$['a']"
+   ],
+   "stdout": "$['a']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ComplianceTest",
+   "args": [
+    "read",
+    "$['a']"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: No results for path: $['a']\n",
+   "status": 1
+  },
+  {
+   "suite": "ComplianceTest",
+   "args": [
+    "compile",
+    "$.['c d']"
+   ],
+   "stdout": "$['c d']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ComplianceTest",
+   "args": [
+    "read",
+    "$.['c d']"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: No results for path: $['c d']\n",
+   "status": 1
+  },
+  {
+   "suite": "ComplianceTest",
+   "args": [
+    "compile",
+    "$[0]"
+   ],
+   "stdout": "$[0]\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ComplianceTest",
+   "args": [
+    "read",
+    "$[0]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Filter: [0] can only be applied to arrays. Current context is: {string-property=string-value, int-max-property=, long-max-property=, boolean-property=true, null-property=null, int-small-property=1, max-price=10, store={book=[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}], bicycle={foo=baz, escape=Esc\b\f\n\r\t\n\t*, color=red, display-price=19.95, foo:bar=fooBar, dot.notation=new, dash-notation=dashes}}, foo=bar, @id=ID}\n",
+   "status": 1
+  },
+  {
+   "suite": "ComplianceTest",
+   "args": [
+    "compile",
+    "$[4]"
+   ],
+   "stdout": "$[4]\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ComplianceTest",
+   "args": [
+    "read",
+    "$[4]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Filter: [4] can only be applied to arrays. Current context is: {string-property=string-value, int-max-property=, long-max-property=, boolean-property=true, null-property=null, int-small-property=1, max-price=10, store={book=[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}], bicycle={foo=baz, escape=Esc\b\f\n\r\t\n\t*, color=red, display-price=19.95, foo:bar=fooBar, dot.notation=new, dash-notation=dashes}}, foo=bar, @id=ID}\n",
+   "status": 1
+  },
+  {
+   "suite": "ComplianceTest",
+   "args": [
+    "compile",
+    "$[-1:]"
+   ],
+   "stdout": "$[-1:]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ComplianceTest",
+   "args": [
+    "read",
+    "$[-1:]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Filter: [-1:] can only be applied to arrays. Current context is: {string-property=string-value, int-max-property=, long-max-property=, boolean-property=true, null-property=null, int-small-property=1, max-price=10, store={book=[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}], bicycle={foo=baz, escape=Esc\b\f\n\r\t\n\t*, color=red, display-price=19.95, foo:bar=fooBar, dot.notation=new, dash-notation=dashes}}, foo=bar, @id=ID}\n",
+   "status": 1
+  },
+  {
+   "suite": "ComplianceTest",
+   "args": [
+    "compile",
+    "$.points[1]"
+   ],
+   "stdout": "$['points'][1]\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ComplianceTest",
+   "args": [
+    "read",
+    "$.points[1]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['points']\n",
+   "status": 1
+  },
+  {
+   "suite": "ComplianceTest",
+   "args": [
+    "compile",
+    "$.points[4].x"
+   ],
+   "stdout": "$['points'][4]['x']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ComplianceTest",
+   "args": [
+    "read",
+    "$.points[4].x"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['points']\n",
+   "status": 1
+  },
+  {
+   "suite": "ComplianceTest",
+   "args": [
+    "compile",
+    "$.points[?(@.id == 'i4')].x"
+   ],
+   "stdout": "$['points'][?]['x']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ComplianceTest",
+   "args": [
+    "read",
+    "$.points[?(@.id == 'i4')].x"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['points']\n",
+   "status": 1
+  },
+  {
+   "suite": "ComplianceTest",
+   "args": [
+    "compile",
+    "$.points[*].x"
+   ],
+   "stdout": "$['points'][*]['x']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ComplianceTest",
+   "args": [
+    "read",
+    "$.points[*].x"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['points']\n",
+   "status": 1
+  },
+  {
+   "suite": "ComplianceTest",
+   "args": [
+    "compile",
+    "$.points[?(@.z)].id"
+   ],
+   "stdout": "$['points'][?]['id']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ComplianceTest",
+   "args": [
+    "read",
+    "$.points[?(@.z)].id"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['points']\n",
+   "status": 1
+  },
+  {
+   "suite": "ComplianceTest",
+   "args": [
+    "compile",
+    "$.menu.items[?(@)]"
+   ],
+   "stdout": "$['menu']['items'][?]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ComplianceTest",
+   "args": [
+    "read",
+    "$.menu.items[?(@)]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['menu']\n",
+   "status": 1
+  },
+  {
+   "suite": "ComplianceTest",
+   "args": [
+    "compile",
+    "$.menu.items[?(@.id == 'ViewSVG')].id"
+   ],
+   "stdout": "$['menu']['items'][?]['id']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ComplianceTest",
+   "args": [
+    "read",
+    "$.menu.items[?(@.id == 'ViewSVG')].id"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['menu']\n",
+   "status": 1
+  },
+  {
+   "suite": "ComplianceTest",
+   "args": [
+    "compile",
+    "$.menu.items[?(@ && @.id == 'ViewSVG')].id"
+   ],
+   "stdout": "$['menu']['items'][?]['id']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ComplianceTest",
+   "args": [
+    "read",
+    "$.menu.items[?(@ && @.id == 'ViewSVG')].id"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['menu']\n",
+   "status": 1
+  },
+  {
+   "suite": "ComplianceTest",
+   "args": [
+    "compile",
+    "$.menu.items[?(@ && @.id && !@.label)].id"
+   ],
+   "stdout": "$['menu']['items'][?]['id']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ComplianceTest",
+   "args": [
+    "read",
+    "$.menu.items[?(@ && @.id && !@.label)].id"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['menu']\n",
+   "status": 1
+  },
+  {
+   "suite": "FilterTest",
+   "args": [
+    "compile",
+    "$[?]"
+   ],
+   "stdout": "",
+   "stderr": "InvalidPathException: Not enough predicates supplied for filter [?] at position 1\n",
+   "status": 1
+  },
+  {
+   "suite": "FilterTest",
+   "args": [
+    "read",
+    "$[?]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "InvalidPathException: Not enough predicates supplied for filter [?] at position 1\n",
+   "status": 1
+  },
+  {
+   "suite": "FilterTest",
+   "args": [
+    "compile",
+    "$[?(@.first-name == 'Jock' && @.address.state == 'Texas')]"
+   ],
+   "stdout": "$[?]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterTest",
+   "args": [
+    "read",
+    "$[?(@.first-name == 'Jock' && @.address.state == 'Texas')]"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterTest",
+   "args": [
+    "compile",
+    "$[0].address.state"
+   ],
+   "stdout": "$[0]['address']['state']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterTest",
+   "args": [
+    "read",
+    "$[0].address.state"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Filter: [0]['address']['state'] can only be applied to arrays. Current context is: {string-property=string-value, int-max-property=, long-max-property=, boolean-property=true, null-property=null, int-small-property=1, max-price=10, store={book=[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}], bicycle={foo=baz, escape=Esc\b\f\n\r\t\n\t*, color=red, display-price=19.95, foo:bar=fooBar, dot.notation=new, dash-notation=dashes}}, foo=bar, @id=ID}\n",
+   "status": 1
+  },
+  {
+   "suite": "FilterTest",
+   "args": [
+    "compile",
+    "$[0].first-name"
+   ],
+   "stdout": "$[0]['first-name']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterTest",
+   "args": [
+    "read",
+    "$[0].first-name"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Filter: [0]['first-name'] can only be applied to arrays. Current context is: {string-property=string-value, int-max-property=, long-max-property=, boolean-property=true, null-property=null, int-small-property=1, max-price=10, store={book=[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}], bicycle={foo=baz, escape=Esc\b\f\n\r\t\n\t*, color=red, display-price=19.95, foo:bar=fooBar, dot.notation=new, dash-notation=dashes}}, foo=bar, @id=ID}\n",
+   "status": 1
+  },
+  {
+   "suite": "FilterTest",
+   "args": [
+    "compile",
+    "$[0].last-name"
+   ],
+   "stdout": "$[0]['last-name']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterTest",
+   "args": [
+    "read",
+    "$[0].last-name"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Filter: [0]['last-name'] can only be applied to arrays. Current context is: {string-property=string-value, int-max-property=, long-max-property=, boolean-property=true, null-property=null, int-small-property=1, max-price=10, store={book=[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}], bicycle={foo=baz, escape=Esc\b\f\n\r\t\n\t*, color=red, display-price=19.95, foo:bar=fooBar, dot.notation=new, dash-notation=dashes}}, foo=bar, @id=ID}\n",
+   "status": 1
+  },
+  {
+   "suite": "FilterTest",
+   "args": [
+    "compile",
+    "$.items[?]"
+   ],
+   "stdout": "",
+   "stderr": "InvalidPathException: Not enough predicates supplied for filter [?] at position 7\n",
+   "status": 1
+  },
+  {
+   "suite": "FilterTest",
+   "args": [
+    "read",
+    "$.items[?]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "InvalidPathException: Not enough predicates supplied for filter [?] at position 7\n",
+   "status": 1
+  },
+  {
+   "suite": "FilterTest",
+   "args": [
+    "compile",
+    "$.store.bicycle.color"
+   ],
+   "stdout": "$['store']['bicycle']['color']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterTest",
+   "args": [
+    "read",
+    "$.store.bicycle.color"
+   ],
+   "document": "store",
+   "stdout": "\"red\"\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "FilterTest",
+   "args": [
+    "compile",
+    "$.fields[?]"
+   ],
+   "stdout": "",
+   "stderr": "InvalidPathException: Not enough predicates supplied for filter [?] at position 8\n",
+   "status": 1
+  },
+  {
+   "suite": "FilterTest",
+   "args": [
+    "read",
+    "$.fields[?]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "InvalidPathException: Not enough predicates supplied for filter [?] at position 8\n",
+   "status": 1
+  },
+  {
+   "suite": "FilterTest",
+   "args": [
+    "compile",
+    "$.store.book[?].title"
+   ],
+   "stdout": "",
+   "stderr": "InvalidPathException: Not enough predicates supplied for filter [?] at position 12\n",
+   "status": 1
+  },
+  {
+   "suite": "FilterTest",
+   "args": [
+    "read",
+    "$.store.book[?].title"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "InvalidPathException: Not enough predicates supplied for filter [?] at position 12\n",
+   "status": 1
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "compile",
+    "$.*.bar"
+   ],
+   "stdout": "$[*]['bar']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "read",
+    "$.*.bar"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "compile",
+    "$['foo']['bar']"
+   ],
+   "stdout": "$['foo']['bar']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "read",
+    "$['foo']['bar']"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Expected to find an object with property ['bar'] in path $['foo'] but found 'java.lang.String'. This is not a json object according to the JsonProvider: 'com.jayway.jsonpath.spi.json.JsonSmartJsonProvider'.\n",
+   "status": 1
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "compile",
+    "$.p.['s', 't'].u"
+   ],
+   "stdout": "$['p']['s','t']['u']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "read",
+    "$.p.['s', 't'].u"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['p']\n",
+   "status": 1
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "compile",
+    "$.p[?(@ == 'valp')]"
+   ],
+   "stdout": "$['p'][?]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "read",
+    "$.p[?(@ == 'valp')]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['p']\n",
+   "status": 1
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "compile",
+    "$.p[?(@[0] == 'valp')]"
+   ],
+   "stdout": "$['p'][?]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "read",
+    "$.p[?(@[0] == 'valp')]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['p']\n",
+   "status": 1
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "compile",
+    "$..book[(@.length-1)] "
+   ],
+   "stdout": "",
+   "stderr": "InvalidPathException: Could not parse token starting at position 7. Expected ?, ', 0-9, * \n",
+   "status": 1
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "read",
+    "$..book[(@.length-1)] "
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "InvalidPathException: Could not parse token starting at position 7. Expected ?, ', 0-9, * \n",
+   "status": 1
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "compile",
+    "$.datas.selling['3','206'].*"
+   ],
+   "stdout": "$['datas']['selling']['3','206'][*]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "read",
+    "$.datas.selling['3','206'].*"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['datas']\n",
+   "status": 1
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "compile",
+    "$[?(@.kind == 'full')]"
+   ],
+   "stdout": "$[?]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "read",
+    "$[?(@.kind == 'full')]"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "compile",
+    "$.arrayOfObjectsAndArrays..k "
+   ],
+   "stdout": "$['arrayOfObjectsAndArrays']..['k']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "read",
+    "$.arrayOfObjectsAndArrays..k "
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['arrayOfObjectsAndArrays']\n",
+   "status": 1
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "compile",
+    "$.arrayOfObjects..k "
+   ],
+   "stdout": "$['arrayOfObjects']..['k']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "read",
+    "$.arrayOfObjects..k "
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['arrayOfObjects']\n",
+   "status": 1
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "compile",
+    "$.foo[?(@.rel == 'item')][0].uri"
+   ],
+   "stdout": "$['foo'][?][0]['uri']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "read",
+    "$.foo[?(@.rel == 'item')][0].uri"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "InvalidPathException: Filter: [?][0]['uri'] can not be applied to primitives. Current context is: bar\n",
+   "status": 1
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "compile",
+    "$.foo[0].uri"
+   ],
+   "stdout": "$['foo'][0]['uri']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "read",
+    "$.foo[0].uri"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Filter: [0]['uri'] can only be applied to arrays. Current context is: bar\n",
+   "status": 1
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "compile",
+    "$.store.book[?(@.children==true)].title"
+   ],
+   "stdout": "$['store']['book'][?]['title']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "read",
+    "$.store.book[?(@.children==true)].title"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "compile",
+    "$.project[?(@.template.@key == 'foo')].field[*].@key"
+   ],
+   "stdout": "$['project'][?]['field'][*]['@key']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "read",
+    "$.project[?(@.template.@key == 'foo')].field[*].@key"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['project']\n",
+   "status": 1
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "compile",
+    "$.project.field[*].@key"
+   ],
+   "stdout": "$['project']['field'][*]['@key']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "read",
+    "$.project.field[*].@key"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['project']\n",
+   "status": 1
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "compile",
+    "$.project.template[?(@.@key == 'foo')].field[*].@key"
+   ],
+   "stdout": "$['project']['template'][?]['field'][*]['@key']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "read",
+    "$.project.template[?(@.@key == 'foo')].field[*].@key"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['project']\n",
+   "status": 1
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "compile",
+    "$.contents[?(@  == 'two')]"
+   ],
+   "stdout": "$['contents'][?]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "read",
+    "$.contents[?(@  == 'two')]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['contents']\n",
+   "status": 1
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "compile",
+    "$[?(@.compatible == true)].sku"
+   ],
+   "stdout": "$[?]['sku']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "read",
+    "$[?(@.compatible == true)].sku"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "compile",
+    "$.datapoints.[*].[0]"
+   ],
+   "stdout": "$['datapoints'][*][0]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "read",
+    "$.datapoints.[*].[0]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['datapoints']\n",
+   "status": 1
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "compile",
+    "$..arr"
+   ],
+   "stdout": "$..['arr']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "read",
+    "$..arr"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "compile",
+    "$.contents[?(@ == 2)]"
+   ],
+   "stdout": "$['contents'][?]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "read",
+    "$.contents[?(@ == 2)]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['contents']\n",
+   "status": 1
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "compile",
+    "$.contents[?(@  == true)]"
+   ],
+   "stdout": "$['contents'][?]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "read",
+    "$.contents[?(@  == true)]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['contents']\n",
+   "status": 1
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "compile",
+    "$.a"
+   ],
+   "stdout": "$['a']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "read",
+    "$.a"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: No results for path: $['a']\n",
+   "status": 1
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "compile",
+    "$.list[?(@['b.b-a']=='batext2')]"
+   ],
+   "stdout": "$['list'][?]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "read",
+    "$.list[?(@['b.b-a']=='batext2')]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['list']\n",
+   "status": 1
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "compile",
+    "$.list[?(@.b.b-a=='batext2')]"
+   ],
+   "stdout": "$['list'][?]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "IssuesTest",
+   "args": [
+    "read",
+    "$.list[?(@.b.b-a=='batext2')]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['list']\n",
+   "status": 1
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "compile",
+    "$.store.book[*].fooBar"
+   ],
+   "stdout": "$['store']['book'][*]['fooBar']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "read",
+    "$.store.book[*].fooBar"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "compile",
+    "$.store.book[*].fooBar.not"
+   ],
+   "stdout": "$['store']['book'][*]['fooBar']['not']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "read",
+    "$.store.book[*].fooBar.not"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "compile",
+    "$.store.book[0]['author.name']"
+   ],
+   "stdout": "$['store']['book'][0]['author.name']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "read",
+    "$.store.book[0]['author.name']"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: No results for path: $['store']['book'][0]['author.name']\n",
+   "status": 1
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "compile",
+    "$.data.passes[0].id"
+   ],
+   "stdout": "$['data']['passes'][0]['id']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "read",
+    "$.data.passes[0].id"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['data']\n",
+   "status": 1
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "compile",
+    "$.data2.passes[0].id"
+   ],
+   "stdout": "$['data2']['passes'][0]['id']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "read",
+    "$.data2.passes[0].id"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['data2']\n",
+   "status": 1
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "compile",
+    "$[?(@.parent = 'ONE')].child.name"
+   ],
+   "stdout": "",
+   "stderr": "InvalidPathException: Expected character: )\n",
+   "status": 1
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "read",
+    "$[?(@.parent = 'ONE')].child.name"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "InvalidPathException: Expected character: )\n",
+   "status": 1
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "compile",
+    "$[?(@['parent'] == 'ONE')].child.name"
+   ],
+   "stdout": "$[?]['child']['name']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "read",
+    "$[?(@['parent'] == 'ONE')].child.name"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "compile",
+    "$.['store'].bicycle.['dot.notation']"
+   ],
+   "stdout": "$['store']['bicycle']['dot.notation']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "read",
+    "$.['store'].bicycle.['dot.notation']"
+   ],
+   "document": "store",
+   "stdout": "\"new\"\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "compile",
+    "$['store']['bicycle']['dot.notation']"
+   ],
+   "stdout": "$['store']['bicycle']['dot.notation']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "read",
+    "$['store']['bicycle']['dot.notation']"
+   ],
+   "document": "store",
+   "stdout": "\"new\"\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "compile",
+    "$.['store']['bicycle']['dot.notation']"
+   ],
+   "stdout": "$['store']['bicycle']['dot.notation']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "read",
+    "$.['store']['bicycle']['dot.notation']"
+   ],
+   "document": "store",
+   "stdout": "\"new\"\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "compile",
+    "$.['store'].['bicycle'].['dot.notation']"
+   ],
+   "stdout": "$['store']['bicycle']['dot.notation']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "read",
+    "$.['store'].['bicycle'].['dot.notation']"
+   ],
+   "document": "store",
+   "stdout": "\"new\"\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "compile",
+    "$.['store'].bicycle.['dash-notation']"
+   ],
+   "stdout": "$['store']['bicycle']['dash-notation']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "read",
+    "$.['store'].bicycle.['dash-notation']"
+   ],
+   "document": "store",
+   "stdout": "\"dashes\"\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "compile",
+    "$['store']['bicycle']['dash-notation']"
+   ],
+   "stdout": "$['store']['bicycle']['dash-notation']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "read",
+    "$['store']['bicycle']['dash-notation']"
+   ],
+   "document": "store",
+   "stdout": "\"dashes\"\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "compile",
+    "$.['store']['bicycle']['dash-notation']"
+   ],
+   "stdout": "$['store']['bicycle']['dash-notation']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "read",
+    "$.['store']['bicycle']['dash-notation']"
+   ],
+   "document": "store",
+   "stdout": "\"dashes\"\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "compile",
+    "$.['store'].['bicycle'].['dash-notation']"
+   ],
+   "stdout": "$['store']['bicycle']['dash-notation']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "read",
+    "$.['store'].['bicycle'].['dash-notation']"
+   ],
+   "document": "store",
+   "stdout": "\"dashes\"\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "compile",
+    "$.[?(@.value == 1)]"
+   ],
+   "stdout": "$[?]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "read",
+    "$.[?(@.value == 1)]"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "compile",
+    "$.[1].value"
+   ],
+   "stdout": "$[1]['value']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "read",
+    "$.[1].value"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Filter: [1]['value'] can only be applied to arrays. Current context is: {string-property=string-value, int-max-property=, long-max-property=, boolean-property=true, null-property=null, int-small-property=1, max-price=10, store={book=[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}], bicycle={foo=baz, escape=Esc\b\f\n\r\t\n\t*, color=red, display-price=19.95, foo:bar=fooBar, dot.notation=new, dash-notation=dashes}}, foo=bar, @id=ID}\n",
+   "status": 1
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "compile",
+    "$['store']['bicycle']['foo:bar']"
+   ],
+   "stdout": "$['store']['bicycle']['foo:bar']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "read",
+    "$['store']['bicycle']['foo:bar']"
+   ],
+   "document": "store",
+   "stdout": "\"fooBar\"\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "compile",
+    "$.store"
+   ],
+   "stdout": "$['store']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "read",
+    "$.store"
+   ],
+   "document": "store",
+   "stdout": "{\"book\":[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}],\"bicycle\":{\"foo\":\"baz\",\"escape\":\"Esc\\b\\f\\n\\r\\t\\n\\t*\",\"color\":\"red\",\"display-price\":19.95,\"foo:bar\":\"fooBar\",\"dot.notation\":\"new\",\"dash-notation\":\"dashes\"}}\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "compile",
+    "$.store.book[1]"
+   ],
+   "stdout": "$['store']['book'][1]\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "read",
+    "$.store.book[1]"
+   ],
+   "document": "store",
+   "stdout": "{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99}\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "compile",
+    "$.store.book[*]"
+   ],
+   "stdout": "$['store']['book'][*]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "read",
+    "$.store.book[*]"
+   ],
+   "document": "store",
+   "stdout": "[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "compile",
+    "$.store.book[0,1].author"
+   ],
+   "stdout": "$['store']['book'][0,1]['author']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "read",
+    "$.store.book[0,1].author"
+   ],
+   "document": "store",
+   "stdout": "[\"Nigel Rees\",\"Evelyn Waugh\"]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "compile",
+    "$.store.book[*].author"
+   ],
+   "stdout": "$['store']['book'][*]['author']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "read",
+    "$.store.book[*].author"
+   ],
+   "document": "store",
+   "stdout": "[\"Nigel Rees\",\"Evelyn Waugh\",\"Herman Melville\",\"J. R. R. Tolkien\"]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "compile",
+    "$.['store'].['book'][*].['author']"
+   ],
+   "stdout": "$['store']['book'][*]['author']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "read",
+    "$.['store'].['book'][*].['author']"
+   ],
+   "document": "store",
+   "stdout": "[\"Nigel Rees\",\"Evelyn Waugh\",\"Herman Melville\",\"J. R. R. Tolkien\"]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "compile",
+    "$['store']['book'][*]['author']"
+   ],
+   "stdout": "$['store']['book'][*]['author']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "JsonPathTest",
+   "args": [
+    "read",
+    "$['store']['book'][*]['author']"
+   ],
+   "document": "store",
+   "stdout": "[\"Nigel Rees\",\"Evelyn Waugh\",\"Herman Melville\",\"J. R. R. Tolkien\"]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "NullHandlingTest",
+   "args": [
+    "compile",
+    "$.children[0].child.age"
+   ],
+   "stdout": "$['children'][0]['child']['age']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "NullHandlingTest",
+   "args": [
+    "read",
+    "$.children[0].child.age"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['children']\n",
+   "status": 1
+  },
+  {
+   "suite": "NullHandlingTest",
+   "args": [
+    "compile",
+    "$.children[2].age"
+   ],
+   "stdout": "$['children'][2]['age']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "NullHandlingTest",
+   "args": [
+    "read",
+    "$.children[2].age"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['children']\n",
+   "status": 1
+  },
+  {
+   "suite": "NullHandlingTest",
+   "args": [
+    "compile",
+    "$.children[1].age"
+   ],
+   "stdout": "$['children'][1]['age']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "NullHandlingTest",
+   "args": [
+    "read",
+    "$.children[1].age"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['children']\n",
+   "status": 1
+  },
+  {
+   "suite": "NullHandlingTest",
+   "args": [
+    "compile",
+    "$.children[*].age"
+   ],
+   "stdout": "$['children'][*]['age']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "NullHandlingTest",
+   "args": [
+    "read",
+    "$.children[*].age"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['children']\n",
+   "status": 1
+  },
+  {
+   "suite": "ArrayIndexFilterTest",
+   "args": [
+    "compile",
+    "$[-10:]"
+   ],
+   "stdout": "$[-10:]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ArrayIndexFilterTest",
+   "args": [
+    "read",
+    "$[-10:]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Filter: [-10:] can only be applied to arrays. Current context is: {string-property=string-value, int-max-property=, long-max-property=, boolean-property=true, null-property=null, int-small-property=1, max-price=10, store={book=[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}], bicycle={foo=baz, escape=Esc\b\f\n\r\t\n\t*, color=red, display-price=19.95, foo:bar=fooBar, dot.notation=new, dash-notation=dashes}}, foo=bar, @id=ID}\n",
+   "status": 1
+  },
+  {
+   "suite": "ArrayIndexFilterTest",
+   "args": [
+    "compile",
+    "$[:10]"
+   ],
+   "stdout": "$[:10]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ArrayIndexFilterTest",
+   "args": [
+    "read",
+    "$[:10]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Filter: [:10] can only be applied to arrays. Current context is: {string-property=string-value, int-max-property=, long-max-property=, boolean-property=true, null-property=null, int-small-property=1, max-price=10, store={book=[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}], bicycle={foo=baz, escape=Esc\b\f\n\r\t\n\t*, color=red, display-price=19.95, foo:bar=fooBar, dot.notation=new, dash-notation=dashes}}, foo=bar, @id=ID}\n",
+   "status": 1
+  },
+  {
+   "suite": "ArrayIndexFilterTest",
+   "args": [
+    "compile",
+    "$[:3]"
+   ],
+   "stdout": "$[:3]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ArrayIndexFilterTest",
+   "args": [
+    "read",
+    "$[:3]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Filter: [:3] can only be applied to arrays. Current context is: {string-property=string-value, int-max-property=, long-max-property=, boolean-property=true, null-property=null, int-small-property=1, max-price=10, store={book=[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}], bicycle={foo=baz, escape=Esc\b\f\n\r\t\n\t*, color=red, display-price=19.95, foo:bar=fooBar, dot.notation=new, dash-notation=dashes}}, foo=bar, @id=ID}\n",
+   "status": 1
+  },
+  {
+   "suite": "ArrayIndexFilterTest",
+   "args": [
+    "compile",
+    "$[-3:]"
+   ],
+   "stdout": "$[-3:]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ArrayIndexFilterTest",
+   "args": [
+    "read",
+    "$[-3:]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Filter: [-3:] can only be applied to arrays. Current context is: {string-property=string-value, int-max-property=, long-max-property=, boolean-property=true, null-property=null, int-small-property=1, max-price=10, store={book=[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}], bicycle={foo=baz, escape=Esc\b\f\n\r\t\n\t*, color=red, display-price=19.95, foo:bar=fooBar, dot.notation=new, dash-notation=dashes}}, foo=bar, @id=ID}\n",
+   "status": 1
+  },
+  {
+   "suite": "ArrayIndexFilterTest",
+   "args": [
+    "compile",
+    "$[0:3]"
+   ],
+   "stdout": "$[0:3]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ArrayIndexFilterTest",
+   "args": [
+    "read",
+    "$[0:3]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Filter: [0:3] can only be applied to arrays. Current context is: {string-property=string-value, int-max-property=, long-max-property=, boolean-property=true, null-property=null, int-small-property=1, max-price=10, store={book=[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}], bicycle={foo=baz, escape=Esc\b\f\n\r\t\n\t*, color=red, display-price=19.95, foo:bar=fooBar, dot.notation=new, dash-notation=dashes}}, foo=bar, @id=ID}\n",
+   "status": 1
+  },
+  {
+   "suite": "ArrayIndexFilterTest",
+   "args": [
+    "compile",
+    "$[-3]"
+   ],
+   "stdout": "$[-3]\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ArrayIndexFilterTest",
+   "args": [
+    "read",
+    "$[-3]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Filter: [-3] can only be applied to arrays. Current context is: {string-property=string-value, int-max-property=, long-max-property=, boolean-property=true, null-property=null, int-small-property=1, max-price=10, store={book=[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}], bicycle={foo=baz, escape=Esc\b\f\n\r\t\n\t*, color=red, display-price=19.95, foo:bar=fooBar, dot.notation=new, dash-notation=dashes}}, foo=bar, @id=ID}\n",
+   "status": 1
+  },
+  {
+   "suite": "ArrayPathTokenTest",
+   "args": [
+    "compile",
+    "$[0,1]"
+   ],
+   "stdout": "$[0,1]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ArrayPathTokenTest",
+   "args": [
+    "read",
+    "$[0,1]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Filter: [0,1] can only be applied to arrays. Current context is: {string-property=string-value, int-max-property=, long-max-property=, boolean-property=true, null-property=null, int-small-property=1, max-price=10, store={book=[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}], bicycle={foo=baz, escape=Esc\b\f\n\r\t\n\t*, color=red, display-price=19.95, foo:bar=fooBar, dot.notation=new, dash-notation=dashes}}, foo=bar, @id=ID}\n",
+   "status": 1
+  },
+  {
+   "suite": "ArrayPathTokenTest",
+   "args": [
+    "compile",
+    "$[:2]"
+   ],
+   "stdout": "$[:2]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ArrayPathTokenTest",
+   "args": [
+    "read",
+    "$[:2]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Filter: [:2] can only be applied to arrays. Current context is: {string-property=string-value, int-max-property=, long-max-property=, boolean-property=true, null-property=null, int-small-property=1, max-price=10, store={book=[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}], bicycle={foo=baz, escape=Esc\b\f\n\r\t\n\t*, color=red, display-price=19.95, foo:bar=fooBar, dot.notation=new, dash-notation=dashes}}, foo=bar, @id=ID}\n",
+   "status": 1
+  },
+  {
+   "suite": "ArrayPathTokenTest",
+   "args": [
+    "compile",
+    "$[:-5]"
+   ],
+   "stdout": "$[:-5]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ArrayPathTokenTest",
+   "args": [
+    "read",
+    "$[:-5]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Filter: [:-5] can only be applied to arrays. Current context is: {string-property=string-value, int-max-property=, long-max-property=, boolean-property=true, null-property=null, int-small-property=1, max-price=10, store={book=[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}], bicycle={foo=baz, escape=Esc\b\f\n\r\t\n\t*, color=red, display-price=19.95, foo:bar=fooBar, dot.notation=new, dash-notation=dashes}}, foo=bar, @id=ID}\n",
+   "status": 1
+  },
+  {
+   "suite": "ArrayPathTokenTest",
+   "args": [
+    "compile",
+    "$[5:]"
+   ],
+   "stdout": "$[5:]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ArrayPathTokenTest",
+   "args": [
+    "read",
+    "$[5:]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Filter: [5:] can only be applied to arrays. Current context is: {string-property=string-value, int-max-property=, long-max-property=, boolean-property=true, null-property=null, int-small-property=1, max-price=10, store={book=[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}], bicycle={foo=baz, escape=Esc\b\f\n\r\t\n\t*, color=red, display-price=19.95, foo:bar=fooBar, dot.notation=new, dash-notation=dashes}}, foo=bar, @id=ID}\n",
+   "status": 1
+  },
+  {
+   "suite": "ArrayPathTokenTest",
+   "args": [
+    "compile",
+    "$[-2:]"
+   ],
+   "stdout": "$[-2:]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ArrayPathTokenTest",
+   "args": [
+    "read",
+    "$[-2:]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Filter: [-2:] can only be applied to arrays. Current context is: {string-property=string-value, int-max-property=, long-max-property=, boolean-property=true, null-property=null, int-small-property=1, max-price=10, store={book=[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}], bicycle={foo=baz, escape=Esc\b\f\n\r\t\n\t*, color=red, display-price=19.95, foo:bar=fooBar, dot.notation=new, dash-notation=dashes}}, foo=bar, @id=ID}\n",
+   "status": 1
+  },
+  {
+   "suite": "ArrayPathTokenTest",
+   "args": [
+    "compile",
+    "$[2:4]"
+   ],
+   "stdout": "$[2:4]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ArrayPathTokenTest",
+   "args": [
+    "read",
+    "$[2:4]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Filter: [2:4] can only be applied to arrays. Current context is: {string-property=string-value, int-max-property=, long-max-property=, boolean-property=true, null-property=null, int-small-property=1, max-price=10, store={book=[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}], bicycle={foo=baz, escape=Esc\b\f\n\r\t\n\t*, color=red, display-price=19.95, foo:bar=fooBar, dot.notation=new, dash-notation=dashes}}, foo=bar, @id=ID}\n",
+   "status": 1
+  },
+  {
+   "suite": "PredicatePathTokenTest",
+   "args": [
+    "compile",
+    "$[?(@.foo == 'foo-val-1')]"
+   ],
+   "stdout": "$[?]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PredicatePathTokenTest",
+   "args": [
+    "read",
+    "$[?(@.foo == 'foo-val-1')]"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PredicatePathTokenTest",
+   "args": [
+    "compile",
+    "$[?(@.int == 1)]"
+   ],
+   "stdout": "$[?]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PredicatePathTokenTest",
+   "args": [
+    "read",
+    "$[?(@.int == 1)]"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PredicatePathTokenTest",
+   "args": [
+    "compile",
+    "$[?(@.decimal == 0.1)]"
+   ],
+   "stdout": "$[?]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PredicatePathTokenTest",
+   "args": [
+    "read",
+    "$[?(@.decimal == 0.1)]"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PredicatePathTokenTest",
+   "args": [
+    "compile",
+    "$[?(@.decimal == 0.1 && @.int == 1)]"
+   ],
+   "stdout": "$[?]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PredicatePathTokenTest",
+   "args": [
+    "read",
+    "$[?(@.decimal == 0.1 && @.int == 1)]"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PredicatePathTokenTest",
+   "args": [
+    "compile",
+    "$[?(@.bool)]"
+   ],
+   "stdout": "$[?]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PredicatePathTokenTest",
+   "args": [
+    "read",
+    "$[?(@.bool)]"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PredicatePathTokenTest",
+   "args": [
+    "compile",
+    "$[?(@.bool == true)]"
+   ],
+   "stdout": "$[?]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PredicatePathTokenTest",
+   "args": [
+    "read",
+    "$[?(@.bool == true)]"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PropertyPathTokenTest",
+   "args": [
+    "compile",
+    "$.not-found"
+   ],
+   "stdout": "$['not-found']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PropertyPathTokenTest",
+   "args": [
+    "read",
+    "$.not-found"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: No results for path: $['not-found']\n",
+   "status": 1
+  },
+  {
+   "suite": "PropertyPathTokenTest",
+   "args": [
+    "compile",
+    "$.foo.not-found"
+   ],
+   "stdout": "$['foo']['not-found']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PropertyPathTokenTest",
+   "args": [
+    "read",
+    "$.foo.not-found"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Expected to find an object with property ['not-found'] in path $['foo'] but found 'java.lang.String'. This is not a json object according to the JsonProvider: 'com.jayway.jsonpath.spi.json.JsonSmartJsonProvider'.\n",
+   "status": 1
+  },
+  {
+   "suite": "PropertyPathTokenTest",
+   "args": [
+    "compile",
+    "$.foo"
+   ],
+   "stdout": "$['foo']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PropertyPathTokenTest",
+   "args": [
+    "read",
+    "$.foo"
+   ],
+   "document": "store",
+   "stdout": "\"bar\"\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PropertyPathTokenTest",
+   "args": [
+    "compile",
+    "$[*].foo"
+   ],
+   "stdout": "$[*]['foo']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PropertyPathTokenTest",
+   "args": [
+    "read",
+    "$[*].foo"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PropertyPathTokenTest",
+   "args": [
+    "compile",
+    "$.baz.baz-child"
+   ],
+   "stdout": "$['baz']['baz-child']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "PropertyPathTokenTest",
+   "args": [
+    "read",
+    "$.baz.baz-child"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['baz']\n",
+   "status": 1
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "compile",
+    "$..author"
+   ],
+   "stdout": "$..['author']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "read",
+    "$..author"
+   ],
+   "document": "store",
+   "stdout": "[\"Nigel Rees\",\"Evelyn Waugh\",\"Herman Melville\",\"J. R. R. Tolkien\"]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "compile",
+    "$..address.street"
+   ],
+   "stdout": "$..['address']['street']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "read",
+    "$..address.street"
+   ],
+   "document": "store",
+   "stdout": "[]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "compile",
+    "$..[*]"
+   ],
+   "stdout": "$..[*]\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "read",
+    "$..[*]"
+   ],
+   "document": "store",
+   "stdout": "[\"string-value\",\"\",\"\",true,null,1,10,{\"book\":[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}],\"bicycle\":{\"foo\":\"baz\",\"escape\":\"Esc\\b\\f\\n\\r\\t\\n\\t*\",\"color\":\"red\",\"display-price\":19.95,\"foo:bar\":\"fooBar\",\"dot.notation\":\"new\",\"dash-notation\":\"dashes\"}},\"bar\",\"ID\",[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}],{\"foo\":\"baz\",\"escape\":\"Esc\\b\\f\\n\\r\\t\\n\\t*\",\"color\":\"red\",\"display-price\":19.95,\"foo:bar\":\"fooBar\",\"dot.notation\":\"new\",\"dash-notation\":\"dashes\"},{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99},\"reference\",\"Nigel Rees\",\"Sayings of the Century\",8.95,\"fiction\",\"Evelyn Waugh\",\"Sword of Honour\",12.99,\"fiction\",\"Herman Melville\",\"Moby Dick\",\"0-553-21311-3\",8.99,\"fiction\",\"J. R. R. Tolkien\",\"The Lord of the Rings\",\"0-395-19395-8\",22.99,\"baz\",\"Esc\\b\\f\\n\\r\\t\\n\\t*\",\"red\",19.95,\"fooBar\",\"new\",\"dashes\"]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "compile",
+    "$['store']"
+   ],
+   "stdout": "$['store']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "read",
+    "$['store']"
+   ],
+   "document": "store",
+   "stdout": "{\"book\":[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}],\"bicycle\":{\"foo\":\"baz\",\"escape\":\"Esc\\b\\f\\n\\r\\t\\n\\t*\",\"color\":\"red\",\"display-price\":19.95,\"foo:bar\":\"fooBar\",\"dot.notation\":\"new\",\"dash-notation\":\"dashes\"}}\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "compile",
+    "$['store']['bicycle']"
+   ],
+   "stdout": "$['store']['bicycle']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "read",
+    "$['store']['bicycle']"
+   ],
+   "document": "store",
+   "stdout": "{\"foo\":\"baz\",\"escape\":\"Esc\\b\\f\\n\\r\\t\\n\\t*\",\"color\":\"red\",\"display-price\":19.95,\"foo:bar\":\"fooBar\",\"dot.notation\":\"new\",\"dash-notation\":\"dashes\"}\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "compile",
+    "$['store']['book']"
+   ],
+   "stdout": "$['store']['book']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "read",
+    "$['store']['book']"
+   ],
+   "document": "store",
+   "stdout": "[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}]\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "compile",
+    "$['store']['bicycle']['address']"
+   ],
+   "stdout": "$['store']['bicycle']['address']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "read",
+    "$['store']['bicycle']['address']"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: No results for path: $['store']['bicycle']['address']\n",
+   "status": 1
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "compile",
+    "$['store']['bicycle']['color']"
+   ],
+   "stdout": "$['store']['bicycle']['color']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "read",
+    "$['store']['bicycle']['color']"
+   ],
+   "document": "store",
+   "stdout": "\"red\"\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "compile",
+    "$['store']['bicycle']['price']"
+   ],
+   "stdout": "$['store']['bicycle']['price']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "read",
+    "$['store']['bicycle']['price']"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: No results for path: $['store']['bicycle']['price']\n",
+   "status": 1
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "compile",
+    "$['store']['bicycle']['items']"
+   ],
+   "stdout": "$['store']['bicycle']['items']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "read",
+    "$['store']['bicycle']['items']"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: No results for path: $['store']['bicycle']['items']\n",
+   "status": 1
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "compile",
+    "$['store']['bicycle']['address']['city']"
+   ],
+   "stdout": "$['store']['bicycle']['address']['city']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "read",
+    "$['store']['bicycle']['address']['city']"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['store']['bicycle']['address']\n",
+   "status": 1
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "compile",
+    "$['store']['bicycle']['address']['street']"
+   ],
+   "stdout": "$['store']['bicycle']['address']['street']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "read",
+    "$['store']['bicycle']['address']['street']"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['store']['bicycle']['address']\n",
+   "status": 1
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "compile",
+    "$['store']['bicycle']['items'][0]"
+   ],
+   "stdout": "$['store']['bicycle']['items'][0]\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "read",
+    "$['store']['bicycle']['items'][0]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['store']['bicycle']['items']\n",
+   "status": 1
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "compile",
+    "$['store']['bicycle']['items'][1]"
+   ],
+   "stdout": "$['store']['bicycle']['items'][1]\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "read",
+    "$['store']['bicycle']['items'][1]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['store']['bicycle']['items']\n",
+   "status": 1
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "compile",
+    "$['store']['bicycle']['items'][2]"
+   ],
+   "stdout": "$['store']['bicycle']['items'][2]\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "read",
+    "$['store']['bicycle']['items'][2]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['store']['bicycle']['items']\n",
+   "status": 1
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "compile",
+    "$['store']['bicycle']['items'][3]"
+   ],
+   "stdout": "$['store']['bicycle']['items'][3]\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "read",
+    "$['store']['bicycle']['items'][3]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['store']['bicycle']['items']\n",
+   "status": 1
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "compile",
+    "$['store']['bicycle']['items'][4]"
+   ],
+   "stdout": "$['store']['bicycle']['items'][4]\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "read",
+    "$['store']['bicycle']['items'][4]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['store']['bicycle']['items']\n",
+   "status": 1
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "compile",
+    "$['store']['bicycle']['items'][5]"
+   ],
+   "stdout": "$['store']['bicycle']['items'][5]\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "read",
+    "$['store']['bicycle']['items'][5]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['store']['bicycle']['items']\n",
+   "status": 1
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "compile",
+    "$['store']['bicycle']['items'][0][0]"
+   ],
+   "stdout": "$['store']['bicycle']['items'][0][0]\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "read",
+    "$['store']['bicycle']['items'][0][0]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['store']['bicycle']['items']\n",
+   "status": 1
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "compile",
+    "$['store']['bicycle']['items'][0][1]"
+   ],
+   "stdout": "$['store']['bicycle']['items'][0][1]\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "read",
+    "$['store']['bicycle']['items'][0][1]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['store']['bicycle']['items']\n",
+   "status": 1
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "compile",
+    "$['store']['bicycle']['items'][0][2]"
+   ],
+   "stdout": "$['store']['bicycle']['items'][0][2]\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "read",
+    "$['store']['bicycle']['items'][0][2]"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: Missing property in path $['store']['bicycle']['items']\n",
+   "status": 1
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "compile",
+    "$['store']['book'][0]"
+   ],
+   "stdout": "$['store']['book'][0]\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "read",
+    "$['store']['book'][0]"
+   ],
+   "document": "store",
+   "stdout": "{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95}\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "compile",
+    "$['store']['book'][1]"
+   ],
+   "stdout": "$['store']['book'][1]\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "read",
+    "$['store']['book'][1]"
+   ],
+   "document": "store",
+   "stdout": "{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99}\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "compile",
+    "$['store']['book'][2]"
+   ],
+   "stdout": "$['store']['book'][2]\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "read",
+    "$['store']['book'][2]"
+   ],
+   "document": "store",
+   "stdout": "{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99}\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "compile",
+    "$['store']['book'][0]['address']"
+   ],
+   "stdout": "$['store']['book'][0]['address']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "ScanPathTokenTest",
+   "args": [
+    "read",
+    "$['store']['book'][0]['address']"
+   ],
+   "document": "store",
+   "stdout": "",
+   "stderr": "PathNotFoundException: No results for path: $['store']['book'][0]['address']\n",
+   "status": 1
+  },
+  {
+   "suite": "TestInternal3",
+   "args": [
+    "compile",
+    "$"
+   ],
+   "stdout": "$\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "TestInternal3",
+   "args": [
+    "read",
+    "$"
+   ],
+   "document": "store",
+   "stdout": "{\"string-property\":\"string-value\",\"int-max-property\":\"\",\"long-max-property\":\"\",\"boolean-property\":true,\"null-property\":null,\"int-small-property\":1,\"max-price\":10,\"store\":{\"book\":[{\"category\":\"reference\",\"author\":\"Nigel Rees\",\"title\":\"Sayings of the Century\",\"display-price\":8.95},{\"category\":\"fiction\",\"author\":\"Evelyn Waugh\",\"title\":\"Sword of Honour\",\"display-price\":12.99},{\"category\":\"fiction\",\"author\":\"Herman Melville\",\"title\":\"Moby Dick\",\"isbn\":\"0-553-21311-3\",\"display-price\":8.99},{\"category\":\"fiction\",\"author\":\"J. R. R. Tolkien\",\"title\":\"The Lord of the Rings\",\"isbn\":\"0-395-19395-8\",\"display-price\":22.99}],\"bicycle\":{\"foo\":\"baz\",\"escape\":\"Esc\\b\\f\\n\\r\\t\\n\\t*\",\"color\":\"red\",\"display-price\":19.95,\"foo:bar\":\"fooBar\",\"dot.notation\":\"new\",\"dash-notation\":\"dashes\"}},\"foo\":\"bar\",\"@id\":\"ID\"}\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "TestInternal3",
+   "args": [
+    "compile",
+    "$.store.book[0].author"
+   ],
+   "stdout": "$['store']['book'][0]['author']\ntrue\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "TestInternal3",
+   "args": [
+    "read",
+    "$.store.book[0].author"
+   ],
+   "document": "store",
+   "stdout": "\"Nigel Rees\"\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "TestInternal3",
+   "args": [
+    "compile",
+    "$.store.book[*].author"
+   ],
+   "stdout": "$['store']['book'][*]['author']\nfalse\n",
+   "stderr": "",
+   "status": 0
+  },
+  {
+   "suite": "TestInternal3",
+   "args": [
+    "read",
+    "$.store.book[*].author"
+   ],
+   "document": "store",
+   "stdout": "[\"Nigel Rees\",\"Evelyn Waugh\",\"Herman Melville\",\"J. R. R. Tolkien\"]\n",
+   "stderr": "",
+   "status": 0
+  }
+ ]
+}

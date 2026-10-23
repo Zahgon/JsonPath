@@ -1,31 +1,31 @@
-Jayway JsonPath
-=====================
+Jayway JsonPath for Go
+======================
 
-**A Java DSL for reading JSON documents.**
+**A Go library and command for reading and updating JSON documents with JsonPath expressions.**
 
-[![Build Status](https://travis-ci.org/json-path/JsonPath.svg?branch=master)](https://travis-ci.org/json-path/JsonPath)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.jayway.jsonpath/json-path/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.jayway.jsonpath/json-path)
-[![Javadoc](https://www.javadoc.io/badge/com.jayway.jsonpath/json-path.svg)](http://www.javadoc.io/doc/com.jayway.jsonpath/json-path)
+This is a port of [Jayway JsonPath](https://github.com/json-path/JsonPath) 2.9.0 to Go. It keeps Jayway's path
+syntax, filters, functions, evaluation options and error messages, and works on the JSON model of json-smart, the
+default JSON provider of the Java library: documents are parsed permissively and numbers keep json-smart's types.
 
-Jayway JsonPath is a Java port of [Stefan Goessner JsonPath implementation](http://goessner.net/articles/JsonPath/). 
+The module is `github.com/json-path/JsonPath` (Go 1.25, standard library only):
+
+| Package     | Contents                                                                         |
+| :---------- | :------------------------------------------------------------------------------- |
+| `jsonpath`  | compiling paths and filters, reading, the write operations and the options       |
+| `smartjson` | the JSON model: json-smart's permissive parser, its value types and serialiser   |
+| `cmd/jsonpath` | the `jsonpath` command                                                        |
 
 Getting Started
 ---------------
 
-JsonPath is available at the Central Maven Repository. Maven users add this to your POM.
-
-```xml
-<dependency>
-    <groupId>com.jayway.jsonpath</groupId>
-    <artifactId>json-path</artifactId>
-    <version>2.9.0</version>
-</dependency>
+```shell
+go get github.com/json-path/JsonPath
+go build -o bin/jsonpath ./cmd/jsonpath
+go test ./...
 ```
 
-If you need help ask questions at [Stack Overflow](http://stackoverflow.com/questions/tagged/jsonpath). Tag the question 'jsonpath' and 'java'.
-
-JsonPath expressions always refer to a JSON structure in the same way as XPath expression are used in combination 
-with an XML document. The "root member object" in JsonPath is always referred to as `$` regardless if it is an 
+JsonPath expressions always refer to a JSON structure in the same way as XPath expression are used in combination
+with an XML document. The "root member object" in JsonPath is always referred to as `$` regardless if it is an
 object or array.
 
 JsonPath expressions can use the dot–notation
@@ -60,13 +60,13 @@ The function output is dictated by the function itself.
 
 | Function    | Description                                                                          | Output type          |
 |:------------|:-------------------------------------------------------------------------------------|:---------------------|
-| `min()`     | Provides the min value of an array of numbers                                        | Double               |
-| `max()`     | Provides the max value of an array of numbers                                        | Double               |
-| `avg()`     | Provides the average value of an array of numbers                                    | Double               | 
-| `stddev()`  | Provides the standard deviation value of an array of numbers                         | Double               | 
-| `length()`  | Provides the length of an array                                                      | Integer              |
-| `sum()`     | Provides the sum value of an array of numbers                                        | Double               |
-| `keys()`    | Provides the property keys (An alternative for terminal tilde `~`)                   | `Set<E>`             |
+| `min()`     | Provides the min value of an array of numbers                                        | double (float64)     |
+| `max()`     | Provides the max value of an array of numbers                                        | double (float64)     |
+| `avg()`     | Provides the average value of an array of numbers                                    | double (float64)     |
+| `stddev()`  | Provides the standard deviation value of an array of numbers                         | double (float64)     |
+| `length()`  | Provides the length of an array                                                      | int (int32)          |
+| `sum()`     | Provides the sum value of an array of numbers                                        | double (float64)     |
+| `keys()`    | Provides the property keys (An alternative for terminal tilde `~`)                   | key view of the object |
 | `concat(X)` | Provides a concatinated version of the path output with a new item                   | like input           |
 | `append(X)` | add an item to the json path output array                                            | like input           |
 | `first()`   | Provides the first item of an array                                                  | Depends on the array |
@@ -76,7 +76,7 @@ The function output is dictated by the function itself.
 Filter Operators
 -----------------
 
-Filters are logical expressions used to filter arrays. A typical filter would be `[?(@.age > 18)]` where `@` represents the current item being processed. More complex filters can be created with logical operators `&&` and `||`. String literals must be enclosed by single or double quotes (`[?(@.color == 'blue')]` or `[?(@.color == "blue")]`).   
+Filters are logical expressions used to filter arrays. A typical filter would be `[?(@.age > 18)]` where `@` represents the current item being processed. More complex filters can be created with logical operators `&&` and `||`. String literals must be enclosed by single or double quotes (`[?(@.color == 'blue')]` or `[?(@.color == "blue")]`).
 
 | Operator                 | Description                                                           |
 | :----------------------- | :-------------------------------------------------------------------- |
@@ -158,337 +158,124 @@ Given the json
 | `$.store.book[?(@.price < 10)]`                                      | All books in store cheaper than 10  |
 | `$..book[?(@.price <= $['expensive'])]`                              | All books in store that are not "expensive"  |
 | `$..book[?(@.author =~ /.*REES/i)]`                                  | All books matching regex (ignore case)  |
-| `$..*`                                                               | Give me every thing   
+| `$..*`                                                               | Give me every thing
 | `$..book.length()`                                                   | The number of books                      |
+
+
+The jsonpath Command
+--------------------
+
+`jsonpath` runs one operation on one JSON document read from standard input:
+
+```shell
+jsonpath [--option NAME]... [--filter FILTER]... [--limit N] [--typed] COMMAND ARGS...
+```
+
+| Command                        | Prints                                                            |
+| :----------------------------- | :---------------------------------------------------------------- |
+| `read PATH`                    | the value the path selects                                        |
+| `set PATH VALUE`               | the result of the update, then the document                       |
+| `put PATH KEY VALUE`           | the result of the update, then the document                       |
+| `add PATH VALUE`               | the result of the update, then the document                       |
+| `delete PATH`                  | the result of the update, then the document                       |
+| `renameKey PATH OLDKEY NEWKEY` | the result of the update, then the document                       |
+| `compile PATH`                 | the normalised path and whether it is definite (no input)         |
+| `filter FILTER`                | the normalised filter (no input)                                  |
+
+`--option` enables an evaluation option, `--filter` supplies the filters of `[?]` placeholders in order, `--limit`
+stops a read after N results and `--typed` prints values with their number types (`int:1`, `long:3000000000`,
+`double:1.5`, `bigdec:0.1234567890123456789`, ...). Values are printed as compact JSON, one per line. Failures go
+to standard error with exit status 1 (JsonPath errors and illegal arguments), 2 (usage) or 3 (anything else).
+
+```shell
+$ jsonpath read '$..book[?(@.price < 10)].title' < store.json
+["Sayings of the Century","Moby Dick"]
+$ jsonpath --option AS_PATH_LIST read '$..book[0,1].price' < store.json
+["$['store']['book'][0]['price']","$['store']['book'][1]['price']"]
+```
 
 Reading a Document
 ------------------
-The simplest most straight forward way to use JsonPath is via the static read API.
 
-```java
-String json = "...";
-
-List<String> authors = JsonPath.read(json, "$.store.book[*].author");
+```go
+doc, err := jsonpath.Parse(storeJSON)
+if err != nil {
+	return err
+}
+path, err := jsonpath.Compile("$.store.book[*].author")
+if err != nil {
+	return err
+}
+authors, err := path.Read(doc, jsonpath.DefaultConfiguration())
 ```
 
-If you only want to read once this is OK. In case you need to read an other path as well this is not the way 
-to go since the document will be parsed every time you call JsonPath.read(...). To avoid the problem you can 
-parse the json first.
+A `DocumentContext` keeps a parsed document and its configuration:
 
-```java
-String json = "...";
-Object document = Configuration.defaultConfiguration().jsonProvider().parse(json);
-
-String author0 = JsonPath.read(document, "$.store.book[0].author");
-String author1 = JsonPath.read(document, "$.store.book[1].author");
-```
-JsonPath also provides a fluent API. This is also the most flexible one.
-
-```java
-String json = "...";
-
-ReadContext ctx = JsonPath.parse(json);
-
-List<String> authorsOfBooksWithISBN = ctx.read("$.store.book[?(@.isbn)].author");
-
-
-List<Map<String, Object>> expensiveBooks = JsonPath
-                            .using(configuration)
-                            .parse(json)
-                            .read("$.store.book[?(@.price > 10)]", List.class);
+```go
+ctx, err := jsonpath.ParseDocument(storeJSON, jsonpath.NewConfiguration(jsonpath.SuppressExceptions))
+if err != nil {
+	return err
+}
+cheap, err := ctx.Read("$.store.book[?(@.price < 10)]")
+first, err := ctx.Limit(1).Read("$..price")
 ```
 
 What is Returned When?
 ----------------------
-When using JsonPath in java its important to know what type you expect in your result. JsonPath will automatically 
-try to cast the result to the type expected by the invoker.
 
-```java
-//Will throw an java.lang.ClassCastException    
-List<String> list = JsonPath.parse(json).read("$.store.book[0].author");
-
-//Works fine
-String author = JsonPath.parse(json).read("$.store.book[0].author");
-```
-
-When evaluating a path you need to understand the concept of when a path is `definite`. A path is `indefinite` if it contains:
-
-* `..` - a deep scan operator
-* `?(<expression>)` - an expression
-* `[<number>, <number> (, <number>)]` - multiple array indexes
-
-`Indefinite` paths always returns a list (as represented by current JsonProvider). 
-
-By default a simple object mapper is provided by the MappingProvider SPI. This allows you to specify the return type you want and the MappingProvider will
-try to perform the mapping. In the example below mapping between `Long` and `Date` is demonstrated. 
-
-```java
-String json = "{\"date_as_long\" : 1411455611975}";
-
-Date date = JsonPath.parse(json).read("$['date_as_long']", Date.class);
-```
-
-If you configure JsonPath to use `JacksonMappingProvider`, `GsonMappingProvider`, or `JakartaJsonProvider` you can even map your JsonPath output directly into POJO's.
-
-```java
-Book book = JsonPath.parse(json).read("$.store.book[0]", Book.class);
-```
-
-To obtain full generics type information, use TypeRef.
-
-```java
-TypeRef<List<String>> typeRef = new TypeRef<List<String>>() {};
-
-List<String> titles = JsonPath.parse(JSON_DOCUMENT).read("$.store.book[*].title", typeRef);
-```
+A path is *definite* when it can select at most one value: it has no deep scan (`..`), wildcard, filter, slice or
+list of indexes. A definite path returns the value it selects, an indefinite path returns an array of values (a
+`*smartjson.Array`). Values are the types of package `smartjson`: `nil`, `bool`, `string`, `int32`, `int64`,
+`*big.Int`, `float64`, `float32` (NaN only), `smartjson.BigDecimal`, `*smartjson.Object` and `*smartjson.Array`.
+Integers take the smallest of int32, int64 and big.Int that holds them; decimals are float64, or `BigDecimal` when
+their text is longer than 18 characters. Functions return float64 (`min`, `max`, `avg`, `stddev`, `sum`), int32
+(`length`) or the selected item.
 
 Predicates
 ----------
-There are three different ways to create filter predicates in JsonPath.
 
-### Inline Predicates
+Filters are written inline, `[?(@.price < 10)]`, or passed to a `[?]` placeholder:
 
-Inline predicates are the ones defined in the path.
-
-```java
-List<Map<String, Object>> books =  JsonPath.parse(json)
-                                     .read("$.store.book[?(@.price < 10)]");
+```go
+cheap, err := jsonpath.ParseFilter("[?(@.price < 10)]")
+if err != nil {
+	return err
+}
+titles, err := ctx.Read("$.store.book[?].title", cheap)
 ```
 
-You can use `&&` and `||` to combine multiple predicates `[?(@.price < 10 && @.category == 'fiction')]` , 
-`[?(@.category == 'reference' || @.price > 10)]`.
- 
-You can use `!` to negate a predicate `[?(!(@.price < 10 && @.category == 'fiction'))]`.
+`Filter.String` returns the normalised filter, as `[?(@['price'] < 10)]`. Any type implementing `Predicate` can be
+used for a placeholder.
 
-### Filter Predicates
- 
-Predicates can be built using the Filter API as shown below:
-
-```java
-import static com.jayway.jsonpath.JsonPath.parse;
-import static com.jayway.jsonpath.Criteria.where;
-import static com.jayway.jsonpath.Filter.filter;
-...
-...
-
-Filter cheapFictionFilter = filter(
-   where("category").is("fiction").and("price").lte(10D)
-);
-
-List<Map<String, Object>> books =  
-   parse(json).read("$.store.book[?]", cheapFictionFilter);
-
-```
-Notice the placeholder `?` for the filter in the path. When multiple filters are provided they are applied in order where the number of placeholders must match 
-the number of provided filters. You can specify multiple predicate placeholders in one filter operation `[?, ?]`, both predicates must match. 
-
-Filters can also be combined with 'OR' and 'AND'
-```java
-Filter fooOrBar = filter(
-   where("foo").exists(true)).or(where("bar").exists(true)
-);
-   
-Filter fooAndBar = filter(
-   where("foo").exists(true)).and(where("bar").exists(true)
-);
-```
-
-### Roll Your Own
- 
-Third option is to implement your own predicates
- 
-```java 
-Predicate booksWithISBN = new Predicate() {
-    @Override
-    public boolean apply(PredicateContext ctx) {
-        return ctx.item(Map.class).containsKey("isbn");
-    }
-};
-
-List<Map<String, Object>> books = 
-   reader.read("$.store.book[?].isbn", List.class, booksWithISBN);
-```
-
-Path vs Value
--------------
-In the Goessner implementation a JsonPath can return either `Path` or `Value`. `Value` is the default and what all the examples above are returning. If you rather have the path of the elements our query is hitting this can be achieved with an option.
-
-```java
-Configuration conf = Configuration.builder()
-   .options(Option.AS_PATH_LIST).build();
-
-List<String> pathList = using(conf).parse(json).read("$..author");
-
-assertThat(pathList).containsExactly(
-    "$['store']['book'][0]['author']",
-    "$['store']['book'][1]['author']",
-    "$['store']['book'][2]['author']",
-    "$['store']['book'][3]['author']");
-```
-
-Set a value 
+Set a value
 -----------
-The library offers the possibility to set a value.
 
-```java
-String newJson = JsonPath.parse(json).set("$['store']['book'][0]['author']", "Paul").jsonString();
+```go
+path, err := jsonpath.Compile("$['store']['book'][0]['author']")
+if err != nil {
+	return err
+}
+_, err = path.Set(doc, "Paul", jsonpath.DefaultConfiguration())
 ```
 
+`Delete`, `Add` (to arrays), `Put` (a key into objects) and `RenameKey` work the same way. They change the document
+in place and return it, or the changed paths with `AsPathList`.
 
+Options
+-------
 
-Tweaking Configuration
-----------------------
+| Option                  | Effect                                                                                  |
+| :---------------------- | :-------------------------------------------------------------------------------------- |
+| `DefaultPathLeafToNull` | a missing leaf reads as `null`                                                          |
+| `AlwaysReturnList`      | a definite path returns its result in an array                                          |
+| `AsPathList`            | the normalised paths of the results are returned instead of the values                  |
+| `SuppressExceptions`    | a missing path returns `null` (definite) or an empty array instead of an error          |
+| `RequireProperties`     | a missing property is an error even when the path is indefinite                         |
 
-### Options
-When creating your Configuration there are a few option flags that can alter the default behaviour.
+Errors
+------
 
-**DEFAULT_PATH_LEAF_TO_NULL**
-<br/>
-This option makes JsonPath return null for missing leafs. Consider the following json
-
-```javascript
-[
-   {
-      "name" : "john",
-      "gender" : "male"
-   },
-   {
-      "name" : "ben"
-   }
-]
-```
-
-```java
-Configuration conf = Configuration.defaultConfiguration();
-
-//Works fine
-String gender0 = JsonPath.using(conf).parse(json).read("$[0]['gender']");
-//PathNotFoundException thrown
-String gender1 = JsonPath.using(conf).parse(json).read("$[1]['gender']");
-
-Configuration conf2 = conf.addOptions(Option.DEFAULT_PATH_LEAF_TO_NULL);
-
-//Works fine
-String gender0 = JsonPath.using(conf2).parse(json).read("$[0]['gender']");
-//Works fine (null is returned)
-String gender1 = JsonPath.using(conf2).parse(json).read("$[1]['gender']");
-```
- 
-**ALWAYS_RETURN_LIST**
-<br/>
-This option configures JsonPath to return a list even when the path is `definite`. 
- 
-```java
-Configuration conf = Configuration.defaultConfiguration();
-
-//ClassCastException thrown
-List<String> genders0 = JsonPath.using(conf).parse(json).read("$[0]['gender']");
-
-Configuration conf2 = conf.addOptions(Option.ALWAYS_RETURN_LIST);
-
-//Works fine
-List<String> genders0 = JsonPath.using(conf2).parse(json).read("$[0]['gender']");
-``` 
-**SUPPRESS_EXCEPTIONS**
-<br/>
-This option makes sure no exceptions are propagated from path evaluation. It follows these simple rules:
-
-* If option `ALWAYS_RETURN_LIST` is present an empty list will be returned
-* If option `ALWAYS_RETURN_LIST` is **NOT** present null returned 
-
-**REQUIRE_PROPERTIES**
-</br>
-This option configures JsonPath to require properties defined in path when an `indefinite` path is evaluated.
-
-```java
-Configuration conf = Configuration.defaultConfiguration();
-
-//Works fine
-List<String> genders = JsonPath.using(conf).parse(json).read("$[*]['gender']");
-
-Configuration conf2 = conf.addOptions(Option.REQUIRE_PROPERTIES);
-
-//PathNotFoundException thrown
-List<String> genders = JsonPath.using(conf2).parse(json).read("$[*]['gender']");
-```
-
-### JsonProvider SPI
-
-JsonPath is shipped with five different JsonProviders:
-
-* [JsonSmartJsonProvider](https://github.com/netplex/json-smart-v2) (default)
-* [JacksonJsonProvider](https://github.com/FasterXML/jackson)
-* [JacksonJsonNodeJsonProvider](https://github.com/FasterXML/jackson)
-* [GsonJsonProvider](https://code.google.com/p/google-gson/) 
-* [JsonOrgJsonProvider](https://github.com/stleary/JSON-java)
-* [JakartaJsonProvider](https://javaee.github.io/jsonp/)
-
-Changing the configuration defaults as demonstrated should only be done when your application is being initialized. Changes during runtime is strongly discouraged, especially in multi threaded applications.
-  
-```java
-Configuration.setDefaults(new Configuration.Defaults() {
-
-    private final JsonProvider jsonProvider = new JacksonJsonProvider();
-    private final MappingProvider mappingProvider = new JacksonMappingProvider();
-      
-    @Override
-    public JsonProvider jsonProvider() {
-        return jsonProvider;
-    }
-
-    @Override
-    public MappingProvider mappingProvider() {
-        return mappingProvider;
-    }
-    
-    @Override
-    public Set<Option> options() {
-        return EnumSet.noneOf(Option.class);
-    }
-});
-```
-
-Note that the JacksonJsonProvider requires `com.fasterxml.jackson.core:jackson-databind:2.4.5` and the GsonJsonProvider requires `com.google.code.gson:gson:2.3.1` on your classpath. 
-
-Both of Jakarta EE 9 [JSON-P (JSR-342)](https://javaee.github.io/jsonp/) and [JSON-B (JSR-367)](http://json-b.net/) providers expect at least Java 8 and require compatible JSON API implementations (such as [Eclipse Glassfish](https://projects.eclipse.org/projects/ee4j.jsonp) and [Eclipse Yasson](https://projects.eclipse.org/projects/ee4j.yasson)) on application runtime classpath; such implementations may also be provided by Java EE application container. Please also note that Apache Johnzon is not classpath-compatible with Jakarta EE 9 specification yet, and if JSON-B mapping provider is chosen then JSON-P provider must be configured and used, too.
-
-One peculiarity of Jakarta EE 9 specifications for JSON processing and databinding (mapping) is immutability of Json arrays and objects as soon as they are fully parsed or written to. To respect the API specification, but allow JsonPath to modify Json documents through add, set/put, replace, and delete operations, `JakartaJsonProvider` has to be initiliazed with optional `true` argument:
-
-* `JsonProvider jsonProvider = new JakartaJsonProvider(true)` (enable mutable Json arrays and objects)
-* `JsonProvider jsonProvider = new JakartaJsonProvider()` (default, strict JSON-P API compliance)
-
-All lookup and read operations with JsonPath are supported regardless of initilization mode. Default mode also needs less memory and is more performant.
-  
-
-### Cache SPI
-
-In JsonPath 2.1.0 a new Cache SPI was introduced. This allows API consumers to configure path caching in a way that suits their needs. The cache must be configured before it is accesses for the first time or a JsonPathException is thrown. JsonPath ships with two cache implementations
-
-* `com.jayway.jsonpath.spi.cache.LRUCache` (default, thread safe)
-* `com.jayway.jsonpath.spi.cache.NOOPCache` (no cache)
-
-If you want to implement your own cache the API is simple. 
-
-```java
-CacheProvider.setCache(new Cache() {
-    //Not thread safe simple cache
-    private Map<String, JsonPath> map = new HashMap<String, JsonPath>();
-
-    @Override
-    public JsonPath get(String key) {
-        return map.get(key);
-    }
-
-    @Override
-    public void put(String key, JsonPath jsonPath) {
-        map.put(key, jsonPath);
-    }
-});
-```
-
-
-
-
-
-
-[![Analytics](https://ga-beacon.appspot.com/UA-54945131-1/jsonpath/index)](https://github.com/igrigorik/ga-beacon)
+Errors are `*jsonpath.Error` values. `errors.Is` matches them against `ErrJSONPath`, `ErrInvalidPath`,
+`ErrPathNotFound` (also an invalid path), `ErrInvalidJSON`, `ErrInvalidModification` and `ErrIllegalArgument`;
+`Error()` gives Jayway's exception name and message, as
+`PathNotFoundException: No results for path: $['store']['nope']`.

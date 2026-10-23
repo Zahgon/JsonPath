@@ -1,1 +1,0 @@
-web: java $JAVA_OPTS -Dserver.http.port=$PORT -DresourceBase=json-path-web-test/build/resources/main/webapp/  -jar json-path-web-test/build/libs/json-path-web-test-*-all.jar
